@@ -57,3 +57,67 @@ export const register = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.json({
+      success: false,
+      message: "Fill all the credentials please!",
+    });
+  }
+
+  try {
+    let existuser = await userModel.findOne({ email });
+    if (!existuser) {
+      return res.json({
+        success: false,
+        message: "user do not exists,Please login first.",
+      });
+    }
+
+    const token = jwt.sign({ id: existuser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+      sameSite: "none", // Required for cross-origin cookies
+    });
+
+    return res.json({ success: true, message: "User logged in successfully." });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const profile = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    let userProfile = await userModel.findOne({ email });
+
+    if (!userProfile) {
+      return res.json({ success: false, message: "something went wrong" });
+    }
+
+    return res.json({ success: true, userProfile });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+      sameSite: "none", // Required for cross-origin cookies
+    });
+    return res.json({ success: true, message:"Logout" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};

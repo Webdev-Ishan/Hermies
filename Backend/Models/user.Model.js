@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
       ref: "Application",
     },
   ],
+  recievedApplications: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Applicatio",
+    },
+  ],
   profilePicture: {
     type: String,
     default: "default-profile.png",
