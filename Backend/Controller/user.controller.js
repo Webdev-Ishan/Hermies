@@ -93,8 +93,8 @@ export const apply = async (req, res) => {
 
     let post = await postModel.findById(relatedPost);
 
-    if(!post){
-      return res.json({success:false,message:"NO apply without post"});
+    if (!post) {
+      return res.json({ success: false, message: "NO apply without post" });
     }
 
     let application = new Application({
@@ -102,28 +102,57 @@ export const apply = async (req, res) => {
       adminRemarks: adminRemarks,
       appliedBy: req.appliedBy,
       relatedPost: relatedPost,
-      recieverId:post.author
+      recieverId: post.author,
     });
 
     await application.save();
+
+    await userModel.findByIdAndUpdate(
+      user._id,
+      { $push: { adoptionApplications: application._id } },
+      { new: true } // Return the updated document
+    );
 
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Application status",
-      text: `Your application is submitedt`,
+      text: `Your application is submited`,
     };
 
     await transporter.sendMail(mailOptions);
 
-    return res.json({ success: true, message: "Application is submitted" });
+    let reciever = await userModel.findById(post.author);
+    if (!reciever) {
+      return res.json({
+        success: false,
+        message: "The application has no reciever",
+      });
+    }
+
+    await userModel.findByIdAndUpdate(
+      reciever._id,
+      { $push: { recievedApplications: application._id } }, // Add the post ID to the posts array
+      { new: true } // Return the updated document
+    );
+
+    const mailOptions2 = {
+      from: process.env.SENDER_EMAIL,
+      to: reciever.email,
+      subject: "Application ",
+      text: `someone send you application for pet adoption`,
+    };
+
+    await transporter.sendMail(mailOptions2);
+
+    return res.json({ success: true, message: "Application is submited" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
 };
 
 export const cancel = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   if (!id) {
     return res.json({ success: false, message: "Application do not exist.." });
   }
@@ -135,7 +164,25 @@ export const cancel = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
 
-    await Application.findByIdAndDelete({_id:id});
+    await userModel.findByIdAndUpdate(
+      user._id,
+      { $pull: { adoptionApplications: id } },
+      { new: true } // Return the updated document
+    );
+
+    let reciever = await userModel.findById(req.recieverId);
+
+    if (!reciever) {
+      return res.json({ success: false, message: "Reciever not found" });
+    }
+
+    await userModel.findByIdAndUpdate(
+      reciever._id,
+      { $pull: { recievedApplications: id } },
+      { new: true } // Return the updated document
+    );
+
+    await Application.findByIdAndDelete({ _id: id });
 
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
@@ -146,7 +193,7 @@ export const cancel = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
-    return res.json({ success: true, message: "Application is cancelled" });
+    return res.json({ success: true, message: "Application is canceled" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
