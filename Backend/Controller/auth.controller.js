@@ -2,9 +2,10 @@ import userModel from "../Models/user.Model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import transporter from "../Config/nodemailer.config.js";
+import {v2 as cloudinary} from 'cloudinary'
 
 export const register = async (req, res) => {
-  const { name, email, password, bio } = req.body;
+  const { name, email, password, bio,profilePicture } = req.body;
 
   if (!name || !email | !password) {
     return res.json({
@@ -24,10 +25,16 @@ export const register = async (req, res) => {
     let salt = await bcrypt.genSalt(10);
     let hashpassword = await bcrypt.hash(password, salt);
 
+
+ const imageUpload = await cloudinary.uploader.upload(profilePicture, {
+      resource_type: "image",
+    });
+
     let user = new userModel({
       name: name,
       email: email,
       password: hashpassword,
+      profilePicture:imageUpload.secure_url,
       bio: bio,
     });
 

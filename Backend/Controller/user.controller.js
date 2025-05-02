@@ -1,6 +1,9 @@
 import postModel from "../Models/post.model.js";
 import userModel from "../Models/user.Model.js";
 import { v2 as cloudinary } from "cloudinary";
+import Application from "../Models/application.model.js";
+import transporter from "../Config/nodemailer.config.js";
+
 export const createPost = async (req, res) => {
   const { title, description, images } = req.body;
 
@@ -43,9 +46,6 @@ export const deletePost = async (req, res) => {
   const postId = req.body.id; // Post ID from the request body
   const authorId = req.authorId; // Author's ID from the middleware
 
-  console.log("Post ID received in deletePost:", postId);
-  console.log("Author ID received in deletePost:", authorId);
-
   if (!postId) {
     return res.json({ success: false, message: "Post ID is required." });
   }
@@ -69,6 +69,84 @@ export const deletePost = async (req, res) => {
     );
 
     return res.json({ success: true, message: "Post deleted successfully." });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const apply = async (req, res) => {
+  const { adminRemarks, message, relatedPost } = req.body;
+
+  if (!adminRemarks || !message || !relatedPost) {
+    return res.json({
+      success: false,
+      message: "Please apply importent info for applying.",
+    });
+  }
+
+  try {
+    let user = await userModel.findById(req.appliedBy);
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    let post = await postModel.findById(relatedPost);
+
+    if(!post){
+      return res.json({success:false,message:"NO apply without post"});
+    }
+
+    let application = new Application({
+      message: message,
+      adminRemarks: adminRemarks,
+      appliedBy: req.appliedBy,
+      relatedPost: relatedPost,
+      recieverId:post.author
+    });
+
+    await application.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Application status",
+      text: `Your application is submitedt`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({ success: true, message: "Application is submitted" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const cancel = async (req, res) => {
+  const {id} = req.params;
+  if (!id) {
+    return res.json({ success: false, message: "Application do not exist.." });
+  }
+
+  try {
+    let user = await userModel.findById(req.appliedBy);
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    await Application.findByIdAndDelete({_id:id});
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Application status",
+      text: `Your application is canceled properly.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({ success: true, message: "Application is cancelled" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
