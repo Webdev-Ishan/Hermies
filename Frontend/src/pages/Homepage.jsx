@@ -24,10 +24,15 @@ const Homepage = () => {
         <div className="relative text-center z-10">
           <h1 className="text-5xl font-bold mb-4 text-yellow-400">Welcome to Hermies</h1>
           <p className="text-lg mb-6">Your one-stop platform for pet adoption and care.</p>
-          <a href="/all-pets" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg">
+          <a href="/all-pets" className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg">
             Explore All Pets
           </a>
+          <a href="/Aihelp" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg">
+            Ask from AI
+          </a>
         </div>
+
+        
       </section>
 
       {/* Featured Pets Section */}

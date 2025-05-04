@@ -1,76 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { url } from "../App";
+import { Link } from "react-router-dom";
 
 const Allpets = () => {
-  const pets = [
-    {
-      id: 1,
-      name: "Buddy",
-      type: "Dog",
-      age: "2 years",
-      image: "/images/dog1.jpg",
-    },
-    {
-      id: 2,
-      name: "Whiskers",
-      type: "Cat",
-      age: "1 year",
-      image: "/images/cat1.jpg",
-    },
-    {
-      id: 3,
-      name: "Coco",
-      type: "Rabbit",
-      age: "6 months",
-      image: "/images/rabbit1.jpg",
-    },
-    {
-      id: 4,
-      name: "Charlie",
-      type: "Dog",
-      age: "3 years",
-      image: "/images/dog2.jpg",
-    },
-    {
-      id: 5,
-      name: "Mittens",
-      type: "Cat",
-      age: "2 years",
-      image: "/images/cat2.jpg",
-    },
-    {
-      id: 6,
-      name: "Snowball",
-      type: "Rabbit",
-      age: "1 year",
-      image: "/images/rabbit2.jpg",
-    },
-  ];
+  const [pets, setpets] = useState([]);
+
+  const getALL = async () => {
+    try {
+      let response = await axios.get(`${url}/api/user/allposts`, {
+        withCredentials: true,
+      });
+      if (response.data && response.data.success) {
+        setpets(response.data.response);
+        console.log(response);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getALL();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
+    <div className="min-h-screen bg-black py-10">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">All Pets</h1>
+        <h1 className="text-3xl font-bold text-center text-yellow-500 mb-8">All Pets</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {pets.map((pet) => (
             <div
               key={pet.id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
+              className="bg-white shadow-lg rounded-lg overflow-hidden border-2 border-blue-500"
             >
               <img
-                src={pet.image}
-                alt={pet.name}
+                src={pet.images}
+                alt={pet.title}
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">{pet.name}</h3>
-                <p className="text-gray-600">Type: {pet.type}</p>
-                <p className="text-gray-600">Age: {pet.age}</p>
-                <a
-                  href={`/pets/${pet.id}`}
-                  className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center py-2 rounded-lg"
-                >
-                  View Details
-                </a>
+                <h3 className="text-xl font-bold mb-2">{pet.title}</h3>
+                <p className="text-black">
+                  <span className="font-bold">Desc:</span>{" "}
+                  <span className="font-normal">{pet.description}</span>
+                </p>
+                <p className="text-black">
+                  <span className="font-bold">Author:</span>{" "}
+                  <span className="font-normal">{pet.author.name}</span>
+                </p>
+                <Link
+          to={`/pets/${pet._id}`}
+          className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center py-2 rounded-lg"
+        >
+          View Details
+        </Link>
               </div>
             </div>
           ))}

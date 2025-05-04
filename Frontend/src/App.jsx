@@ -9,6 +9,7 @@ import PetInfo from "./pages/Petinfo";
 import Donation from "./pages/Donation";
 import CreatePost from "./pages/CreatePost";
 import AllPets from "./pages/Allpets";
+import AIhelp from "./pages/AIhelp";
 
 export const url ='http://localhost:3000'
 
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/donate" element={<Donation />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/all-pets" element={<AllPets />} />
+        <Route path="/AIhelp" element={<AIhelp />} />
       </Routes>
     </Router>
     </>

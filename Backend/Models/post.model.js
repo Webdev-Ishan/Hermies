@@ -15,7 +15,9 @@ const postSchema = new mongoose.Schema({
     {
       type: String, // URLs of images related to the post
     },
-  
+  type:{
+type:String,
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model

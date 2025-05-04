@@ -5,7 +5,7 @@ import Application from "../Models/application.model.js";
 import transporter from "../Config/nodemailer.config.js";
 
 export const createPost = async (req, res) => {
-  const { title, description, images } = req.body;
+  const { title, description, images,type } = req.body;
 
   if (!title || !description || !images) {
     return res.json({
@@ -23,6 +23,7 @@ export const createPost = async (req, res) => {
       description: description,
       images: imageUpload.secure_url,
       author: req.authorId,
+      type:type
     });
 
     await post.save();
@@ -195,6 +196,44 @@ export const cancel = async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     return res.json({ success: true, message: "Application is canceled" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+
+export const getAll = async(req,res)=>{
+
+
+try {
+
+  let response = await postModel.find().populate("author", "name email");
+  if(!response){
+    return res.json({success:false,message:"SOmething went wrong"})
+  }
+
+  return res.json({success:true,response})
+} catch (error) {
+  return res.json({success:false,message:error.message})
+}
+
+}
+
+export const petinfo = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.json({ success: false, message: "Petition ID is required." });
+  }
+
+  try {
+    const petition = await postModel.findById(id).populate("author","name email");
+
+    if (!petition) {
+      return res.json({ success: false, message: "Petition not found." });
+    }
+
+    return res.json({ success: true, petition });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

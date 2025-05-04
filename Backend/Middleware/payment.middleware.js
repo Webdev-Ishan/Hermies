@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const postUser = async (req, res, next) => {
+export const payment = async (req, res, next) => {
   if (!req.cookies.token) {
     return res.json({ success: false, message: "User is not logged in." });
   }
@@ -9,6 +9,7 @@ export const postUser = async (req, res, next) => {
   try {
     let decodetoken = jwt.verify(token, process.env.JWT_SECRET);
     if (decodetoken.id) {
+      req.user = {}; // Initialize req.user if undefined
       req.user.userId = decodetoken.id;
     }
 

@@ -2,12 +2,18 @@ import Payment from "../Models/payment.model.js";
 import Razorpay from "../Config/Razorpay.js";
 
 export const donate = async (req, res) => {
-    const { amount, currency, userId } = req.body;
+    const { amount, currency } = req.body;
+    const userId = req.user.userId;
 
-    if (!amount || !userId) {
-      return res.status(400).json({ success: false, message: "Amount and userId are required." });
+
+    if (!amount ) {
+      return res.status(400).json({ success: false, message: "Amount is required" });
     }
 
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required." });
+    }
   try {
 
        // Create a Razorpay order
@@ -29,7 +35,13 @@ export const donate = async (req, res) => {
       });
   
       await payment.save();
-      return res.json({success:true,message:"Payment successfull"});
+     return res.json({
+      success: true,
+      message: "Order created successfully.",
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+    });
 
   } catch (error) {
     return res.json({sucess:false,message:error.message})
