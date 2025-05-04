@@ -15,7 +15,10 @@ DbConnect();
 cloudConfig();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173", // Replace with your frontend URL
+  credentials: true,
+}));
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);

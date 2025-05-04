@@ -43,7 +43,7 @@ export const createPost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const postId = req.body.id; // Post ID from the request body
+  const {postId} = req.params
   const authorId = req.authorId; // Author's ID from the middleware
 
   if (!postId) {
@@ -75,9 +75,10 @@ export const deletePost = async (req, res) => {
 };
 
 export const apply = async (req, res) => {
-  const { adminRemarks, message, relatedPost } = req.body;
+  const { adminRemarks, message } = req.body;
+  const {id} = req.params;
 
-  if (!adminRemarks || !message || !relatedPost) {
+  if (!adminRemarks || !message ) {
     return res.json({
       success: false,
       message: "Please apply importent info for applying.",
@@ -101,7 +102,7 @@ export const apply = async (req, res) => {
       message: message,
       adminRemarks: adminRemarks,
       appliedBy: req.appliedBy,
-      relatedPost: relatedPost,
+      relatedPost: id,
       recieverId: post.author,
     });
 

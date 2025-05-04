@@ -2,10 +2,10 @@ import userModel from "../Models/user.Model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import transporter from "../Config/nodemailer.config.js";
-import {v2 as cloudinary} from 'cloudinary'
+import { v2 as cloudinary } from "cloudinary";
 
 export const register = async (req, res) => {
-  const { name, email, password, bio,profilePicture } = req.body;
+  const { name, email, password, bio } = req.body;
 
   if (!name || !email | !password) {
     return res.json({
@@ -25,8 +25,7 @@ export const register = async (req, res) => {
     let salt = await bcrypt.genSalt(10);
     let hashpassword = await bcrypt.hash(password, salt);
 
-
- const imageUpload = await cloudinary.uploader.upload(profilePicture, {
+    const imageUpload = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "image",
     });
 
@@ -34,7 +33,7 @@ export const register = async (req, res) => {
       name: name,
       email: email,
       password: hashpassword,
-      profilePicture:imageUpload.secure_url,
+      profilePicture: imageUpload.secure_url,
       bio: bio,
     });
 
@@ -91,20 +90,20 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "none", // Required for cross-origin cookies
+      sameSite: "lax", // Required for cross-origin cookies
     });
 
-    return res.json({ success: true, message: "User logged in successfully." });
+    return res.json({ success: true, message: "User logged insuccessfully." });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
 };
 
 export const profile = async (req, res) => {
-  const { email } = req.body;
+  const { id } = req.body;
 
   try {
-    let userProfile = await userModel.findOne({ email });
+    let userProfile = await userModel.findById(id);
 
     if (!userProfile) {
       return res.json({ success: false, message: "something went wrong" });
@@ -123,7 +122,7 @@ export const logout = async (req, res) => {
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
       sameSite: "none", // Required for cross-origin cookies
     });
-    return res.json({ success: true, message:"Logout" });
+    return res.json({ success: true, message: "Logout" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

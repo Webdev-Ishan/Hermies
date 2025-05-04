@@ -11,7 +11,7 @@ userRouter.post(
   upload.single("image"),
   userController.createPost
 );
-userRouter.post("/deletePost", postUser, userController.deletePost);
-userRouter.post("/apply", apply, userController.apply);
+userRouter.post("/deletePost/:id", postUser, userController.deletePost);
+userRouter.post("/apply/:id", apply, userController.apply);
 userRouter.post("/cancel/:id", apply, userController.cancel);
 export default userRouter;
