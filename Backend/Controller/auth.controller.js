@@ -103,12 +103,15 @@ export const profile = async (req, res) => {
   const { id } = req.body;
 
   try {
-    let userProfile = await userModel.findById(id);
+    let userProfile = await userModel.findById(id).populate("posts","title description adoptionStatus").populate("adoptionApplications","status");
 
     if (!userProfile) {
       return res.json({ success: false, message: "something went wrong" });
     }
 
+
+
+    
     return res.json({ success: true, userProfile });
   } catch (error) {
     return res.json({ success: false, message: error.message });

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { url } from "../App";
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 
 const Petinfo = () => {
   const [image, setimage] = useState(null);
@@ -59,9 +59,12 @@ const Petinfo = () => {
             <p className="text-gray-600 mb-4">
               <span className="font-bold">Description:</span> {description}
             </p>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+            <Link
+              to={`/Adoption/${id}`}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+            >
               Apply for Adoption
-            </button>
+            </Link>
           </div>
         </div>
       </div>

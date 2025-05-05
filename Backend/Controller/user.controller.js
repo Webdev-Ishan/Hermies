@@ -5,16 +5,16 @@ import Application from "../Models/application.model.js";
 import transporter from "../Config/nodemailer.config.js";
 
 export const createPost = async (req, res) => {
-  const { title, description, images,type } = req.body;
+  const { title, description, type } = req.body;
 
-  if (!title || !description || !images) {
+  if (!title || !description) {
     return res.json({
       success: false,
       message: "Please fill all the requirements.",
     });
   }
   try {
-    const imageUpload = await cloudinary.uploader.upload(images, {
+    const imageUpload = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "image",
     });
 
@@ -23,7 +23,7 @@ export const createPost = async (req, res) => {
       description: description,
       images: imageUpload.secure_url,
       author: req.authorId,
-      type:type
+      type: type,
     });
 
     await post.save();
@@ -44,16 +44,16 @@ export const createPost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const {postId} = req.params
+  const { id } = req.params;
   const authorId = req.authorId; // Author's ID from the middleware
 
-  if (!postId) {
+  if (!id) {
     return res.json({ success: false, message: "Post ID is required." });
   }
 
   try {
     // Delete the post from the database
-    const deletedPost = await postModel.findByIdAndDelete(postId);
+    const deletedPost = await postModel.findByIdAndDelete({ _id: id });
 
     if (!deletedPost) {
       return res.json({
@@ -65,7 +65,7 @@ export const deletePost = async (req, res) => {
     // Remove the post ID from the author's `posts` array
     await userModel.findByIdAndUpdate(
       authorId, // Author's ID
-      { $pull: { posts: postId } }, // Remove the post ID from the `posts` array
+      { $pull: { posts: id } }, // Remove the post ID from the `posts` array
       { new: true } // Return the updated document
     );
 
@@ -75,11 +75,22 @@ export const deletePost = async (req, res) => {
   }
 };
 
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let post = await postModel.findById(id);
+    return res.json({ success: true, post });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
 export const apply = async (req, res) => {
   const { adminRemarks, message } = req.body;
-  const {id} = req.params;
+  const { id } = req.params;
 
-  if (!adminRemarks || !message ) {
+  if (!adminRemarks || !message) {
     return res.json({
       success: false,
       message: "Please apply importent info for applying.",
@@ -93,7 +104,7 @@ export const apply = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
 
-    let post = await postModel.findById(relatedPost);
+    let post = await postModel.findById(id);
 
     if (!post) {
       return res.json({ success: false, message: "NO apply without post" });
@@ -172,8 +183,7 @@ export const cancel = async (req, res) => {
       { new: true } // Return the updated document
     );
 
-    let reciever = await userModel.findById(req.recieverId);
-
+    let reciever = await userModel.findById(req.body.recieverId);
     if (!reciever) {
       return res.json({ success: false, message: "Reciever not found" });
     }
@@ -201,23 +211,18 @@ export const cancel = async (req, res) => {
   }
 };
 
+export const getAll = async (req, res) => {
+  try {
+    let response = await postModel.find().populate("author", "name email");
+    if (!response) {
+      return res.json({ success: false, message: "SOmething went wrong" });
+    }
 
-export const getAll = async(req,res)=>{
-
-
-try {
-
-  let response = await postModel.find().populate("author", "name email");
-  if(!response){
-    return res.json({success:false,message:"SOmething went wrong"})
+    return res.json({ success: true, response });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
   }
-
-  return res.json({success:true,response})
-} catch (error) {
-  return res.json({success:false,message:error.message})
-}
-
-}
+};
 
 export const petinfo = async (req, res) => {
   const { id } = req.params;
@@ -227,13 +232,30 @@ export const petinfo = async (req, res) => {
   }
 
   try {
-    const petition = await postModel.findById(id).populate("author","name email");
+    const petition = await postModel
+      .findById(id)
+      .populate("author", "name email");
 
     if (!petition) {
       return res.json({ success: false, message: "Petition not found." });
     }
 
     return res.json({ success: true, petition });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const getApply = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let application = await Application.findOne({ _id: id });
+    if (application) {
+      return res.json({ success: true, application });
+    } else {
+      return res.json({ success: true, message: "Something went wrong" });
+    }
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
