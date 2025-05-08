@@ -32,40 +32,56 @@ const Homepage = () => {
     <div className="font-sans">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center text-white">
-        {/* Video Background */}
-        <video
-          className="absolute top-0 left-0 w-full h-full object-cover"
-          src="https://videos.pexels.com/video-files/3040808/3040808-sd_640_360_30fps.mp4"
-          autoPlay
-          loop
-          muted
-        ></video>
+    {/* Video Background */}
+    <video
+      className="absolute top-0 left-0 w-full h-full object-cover"
+      src="https://videos.pexels.com/video-files/3040808/3040808-sd_640_360_30fps.mp4"
+      autoPlay
+      loop
+      muted
+    ></video>
 
-        {/* Overlay */}
-        <div className="absolute top-0 left-0 w-full h-full "></div>
+    {/* Overlay */}
+    <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20"></div>
 
-        {/* Hero Content */}
-        <div className="relative text-center z-10">
-          <h1 className="text-5xl font-bold mb-4 text-yellow-400">
-            Welcome to Hermies
-          </h1>
-          <p className="text-lg mb-6">
-            Your one-stop platform for pet adoption and care.
-          </p>
-          <a
-            href="/all-pets"
-            className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg"
-          >
-            Explore All Pets
-          </a>
-          <a
-            href="/Aihelp"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg"
-          >
-            Ask from AI
-          </a>
-        </div>
-      </section>
+    {/* Top Right Auth Buttons */}
+    <div className="absolute top-6 right-8 z-20 flex space-x-4">
+      <a
+        href="/login"
+        className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        Login
+      </a>
+      <a
+        href="/signup"
+        className="bg-yellow-400 text-black font-semibold px-3 py-2 rounded-lg hover:bg-yellow-300 transition"
+      >
+        SignUp
+      </a>
+    </div>
+
+    {/* Hero Content */}
+    <div className="relative text-center z-10">
+      <h1 className="text-5xl font-bold mb-4 text-yellow-400">
+        Welcome to Hermies
+      </h1>
+      <p className="text-lg mb-6">
+        Your one-stop platform for pet adoption and care.
+      </p>
+      <a
+        href="/all-pets"
+        className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg"
+      >
+        Explore All Pets
+      </a>
+      <a
+        href="/Aihelp"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg"
+      >
+        Ask from AI
+      </a>
+    </div>
+  </section>
 
       {/* Featured Pets Section */}
       <section className="py-16 bg-gray-100">

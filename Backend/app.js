@@ -9,10 +9,12 @@ import userRouter from "./Routes/user.Routes.js";
 import aiRouter from "./Routes/ai.routes.js";
 import paymentRouter from "./Routes/payment.routes.js";
 import cloudConfig from "./Config/cloudinary.js";
+import { redisconnect } from "./Config/redis.js";
 const port = process.env.port || 3000;
 const app = express();
 DbConnect();
 cloudConfig();
+await redisconnect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({

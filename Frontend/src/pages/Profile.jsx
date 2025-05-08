@@ -44,6 +44,9 @@ navigate('/login')
 
 }
 
+const getHome = async()=>{
+  navigate("/")
+}
 
   useEffect(() => {
     getProfile();
@@ -68,11 +71,18 @@ navigate('/login')
             </div>
           </div>
           <button
+            onClick={getHome}
+            className="bg-blue-500 text-white py-2 px-4 ml-2 rounded-lg hover:bg-red-700 "
+          >
+            Home
+          </button>
+          <button
             onClick={handleLogout}
-            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700 "
+            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700 "
           >
             Logout
           </button>
+          
         </div>
 
         {/* Adoption Applications Section */}

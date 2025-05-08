@@ -3,8 +3,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { url } from "../App";
 import Profile from '../assets/Profile.webp'
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -37,6 +39,7 @@ console.log(DP)
         setpassword("");
         setbio("");
         setDP("");
+        navigate("/");
       } else {
         console.log("Something went wrong", response);
         toast.error("Something went wrong");

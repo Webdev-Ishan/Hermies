@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import transporter from "../Config/nodemailer.config.js";
 import { v2 as cloudinary } from "cloudinary";
+import { client } from "../Config/redis.js";
 
 export const register = async (req, res) => {
   const { name, email, password, bio } = req.body;
@@ -14,6 +15,18 @@ export const register = async (req, res) => {
     });
   }
   try {
+
+let cache = await client.get(`user:${email}`)
+cache = JSON.parse(cache) || null;
+
+if(cache && cache.email){
+  return res.json({
+    success: false,
+    message: "user already exists in cache",
+  });
+
+}
+
     let existuser = await userModel.findOne({ email });
     if (existuser) {
       return res.json({
@@ -38,6 +51,7 @@ export const register = async (req, res) => {
     });
 
     await user.save();
+    await client.set(`user:${email}`,JSON.stringify(user));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -75,7 +89,38 @@ export const login = async (req, res) => {
   }
 
   try {
+
+    let cache = await client.get(`user:${email}`)
+    cache = JSON.parse(cache) || null;
+    
+    if(cache && cache.email){
+      let decode = await bcrypt.compare(password,cache.password);
+
+      if(!decode){
+        return res.json({
+          success: false,
+          message: "Email or password is wrong.",
+        });
+  
+      }
+  
+      const token = jwt.sign({ id: cache._id }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+  
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        sameSite: "lax", // Required for cross-origin cookies
+      });
+  
+      return res.json({ success: true, message: "User logged insuccessfully." });
+    
+    }
+
+
     let existuser = await userModel.findOne({ email });
+
     if (!existuser) {
       return res.json({
         success: false,
@@ -83,7 +128,9 @@ export const login = async (req, res) => {
       });
     }
 
-    let decode = await bcrypt.compare(existuser.password,password);
+
+
+    let decode = await bcrypt.compare(password,existuser.password);
 
     if(!decode){
       return res.json({
