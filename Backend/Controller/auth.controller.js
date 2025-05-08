@@ -83,6 +83,16 @@ export const login = async (req, res) => {
       });
     }
 
+    let decode = await bcrypt.compare(existuser.password,password);
+
+    if(!decode){
+      return res.json({
+        success: false,
+        message: "Email or password is wrong.",
+      });
+
+    }
+
     const token = jwt.sign({ id: existuser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
