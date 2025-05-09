@@ -36,7 +36,7 @@ const [posts,setPosts]= React.useState([]);
 
 
 const handleLogout = async()=>{
-let response = await axios.post(`${url}/api/auth/logout`,{withCredentials:true});
+let response = await axios.post(`${url}/api/auth/logout`,{withCredentials:true},{email});
 if(response.data && response.data.success){
 toast.success("Logged Out successfull!!")
 navigate('/login')

@@ -15,17 +15,15 @@ export const register = async (req, res) => {
     });
   }
   try {
+    let cache = await client.get(`user:${email}`);
+    cache = JSON.parse(cache) || null;
 
-let cache = await client.get(`user:${email}`)
-cache = JSON.parse(cache) || null;
-
-if(cache && cache.email){
-  return res.json({
-    success: false,
-    message: "user already exists in cache",
-  });
-
-}
+    if (cache && cache.email) {
+      return res.json({
+        success: false,
+        message: "user already exists in cache",
+      });
+    }
 
     let existuser = await userModel.findOne({ email });
     if (existuser) {
@@ -51,7 +49,7 @@ if(cache && cache.email){
     });
 
     await user.save();
-    await client.set(`user:${email}`,JSON.stringify(user));
+    await client.set(`user:${email}`, JSON.stringify(user));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -89,35 +87,35 @@ export const login = async (req, res) => {
   }
 
   try {
-
-    let cache = await client.get(`user:${email}`)
+    let cache = await client.get(`user:${email}`);
     cache = JSON.parse(cache) || null;
-    
-    if(cache && cache.email){
-      let decode = await bcrypt.compare(password,cache.password);
 
-      if(!decode){
+    if (cache && cache.email) {
+
+      let decode = await bcrypt.compare(password, cache.password);
+
+      if (!decode) {
         return res.json({
           success: false,
           message: "Email or password is wrong.",
         });
-  
       }
-  
+
       const token = jwt.sign({ id: cache._id }, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
-  
+
       res.cookie("token", token, {
         httpOnly: true,
         maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
         sameSite: "lax", // Required for cross-origin cookies
       });
-  
-      return res.json({ success: true, message: "User logged insuccessfully." });
-    
-    }
 
+      return res.json({
+        success: true,
+        message: "User logged in successfully from cache.",
+      });
+    }
 
     let existuser = await userModel.findOne({ email });
 
@@ -128,16 +126,14 @@ export const login = async (req, res) => {
       });
     }
 
+    await client.set(`user:${email}`, JSON.stringify(existuser));
+    let decode = await bcrypt.compare(password, existuser.password);
 
-
-    let decode = await bcrypt.compare(password,existuser.password);
-
-    if(!decode){
+    if (!decode) {
       return res.json({
         success: false,
         message: "Email or password is wrong.",
       });
-
     }
 
     const token = jwt.sign({ id: existuser._id }, process.env.JWT_SECRET, {
@@ -160,15 +156,15 @@ export const profile = async (req, res) => {
   const { id } = req.body;
 
   try {
-    let userProfile = await userModel.findById(id).populate("posts","title description adoptionStatus").populate("adoptionApplications","status");
+    let userProfile = await userModel
+      .findById(id)
+      .populate("posts", "title description adoptionStatus")
+      .populate("adoptionApplications", "status");
 
     if (!userProfile) {
       return res.json({ success: false, message: "something went wrong" });
     }
 
-
-
-    
     return res.json({ success: true, userProfile });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -177,12 +173,21 @@ export const profile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
+
+
+
+  let cache =  await client.del(`user:email:${req.body.email}`)
+
+  if(cache){
+
     res.cookie("token", "", {
       httpOnly: true,
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
       sameSite: "none", // Required for cross-origin cookies
     });
-    return res.json({ success: true, message: "Logout" });
+   
+  }
+  return res.json({ success: true, message: "Logout" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
