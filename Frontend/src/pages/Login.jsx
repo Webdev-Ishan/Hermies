@@ -3,11 +3,13 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { url } from "../App";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import Authcontext from "../Context/AuthContext";
 const Login = () => {
   const naviagte = useNavigate();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-
+  const { login } = useContext(Authcontext);
   const submithandeler = async (e) => {
     e.preventDefault();
 
@@ -26,6 +28,7 @@ const Login = () => {
         console.log("Account logged in ");
         setemail("");
         setpassword("");
+        login();
         naviagte("/profile");
       } else {
         console.log("Something went wrong", response);

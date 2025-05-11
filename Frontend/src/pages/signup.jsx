@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { url } from "../App";
-import Profile from '../assets/Profile.webp'
+import Profile from "../assets/Profile.webp";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import Authcontext from "../Context/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ const Signup = () => {
   const [password, setpassword] = useState("");
   const [bio, setbio] = useState("");
   const [DP, setDP] = useState("");
+
+  const { login } = useContext(Authcontext);
 
   const submithandeler = async (e) => {
     e.preventDefault();
@@ -22,8 +26,8 @@ const Signup = () => {
     formdata.append("password", password);
     formdata.append("bio", bio);
     formdata.append("profilePicture", DP); // Append the file
-    
-console.log(DP)
+
+    console.log(DP);
     try {
       let response = await axios.post(`${url}/api/auth/register`, formdata, {
         headers: {
@@ -39,13 +43,14 @@ console.log(DP)
         setpassword("");
         setbio("");
         setDP("");
+        login();
         navigate("/");
       } else {
         console.log("Something went wrong", response);
         toast.error("Something went wrong");
       }
     } catch (error) {
-     // console.log(error.message);
+      // console.log(error.message);
       toast.error(error.message);
     }
   };

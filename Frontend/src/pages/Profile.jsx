@@ -2,30 +2,36 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { url } from "../App";
 import { toast } from "react-toastify";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Authcontext from "../Context/AuthContext";
+import { useContext } from "react";
 
 const Profile = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [bio, setBio] = React.useState("");
-  const [DP, setDP] = React.useState("https://imgs.search.brave.com/vD1b_HCFCmNgGZQHC1-aC07MQ6Iw-bZfWCiF9nijnXM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS12ZWN0b3Iv/dXNlci1jaXJjbGVz/LXNldF83ODM3MC00/NzA0LmpwZz9zZW10/PWFpc19oeWJyaWQm/dz03NDA");
-const[application,setApplication] = React.useState([])
-const [posts,setPosts]= React.useState([]);
+  const [DP, setDP] = React.useState(
+    "https://imgs.search.brave.com/vD1b_HCFCmNgGZQHC1-aC07MQ6Iw-bZfWCiF9nijnXM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS12ZWN0b3Iv/dXNlci1jaXJjbGVz/LXNldF83ODM3MC00/NzA0LmpwZz9zZW10/PWFpc19oeWJyaWQm/dz03NDA"
+  );
+  const [application, setApplication] = React.useState([]);
+  const [posts, setPosts] = React.useState([]);
 
+  const { logout } = useContext(Authcontext);
   const getProfile = async () => {
     try {
-      let response = await axios.get(`${url}/api/auth/profile`,{withCredentials:true});
-  
+      let response = await axios.get(`${url}/api/auth/profile`, {
+        withCredentials: true,
+      });
+
       if (response.data && response.data.success) {
         setName(response.data.userProfile.name);
-      setEmail(response.data.userProfile.email);
-      setBio(response.data.userProfile.bio);
-      setDP(response.data.userProfile.profilePicture);
-      setApplication(response.data.userProfile.adoptionApplications)
-      setPosts(response.data.userProfile.posts)
-    
+        setEmail(response.data.userProfile.email);
+        setBio(response.data.userProfile.bio);
+        setDP(response.data.userProfile.profilePicture);
+        setApplication(response.data.userProfile.adoptionApplications);
+        setPosts(response.data.userProfile.posts);
       } else {
         toast.error("Something went wrong!!!");
       }
@@ -34,23 +40,25 @@ const [posts,setPosts]= React.useState([]);
     }
   };
 
+  const handleLogout = async () => {
+    let response = await axios.post(
+      `${url}/api/auth/logout`,
+      { withCredentials: true },
+      { email }
+    );
+    if (response.data && response.data.success) {
+      toast.success("Logged Out successfull!!");
+      logout();
+      navigate("/login");
+    }
+  };
 
-const handleLogout = async()=>{
-let response = await axios.post(`${url}/api/auth/logout`,{withCredentials:true},{email});
-if(response.data && response.data.success){
-toast.success("Logged Out successfull!!")
-navigate('/login')
-}
-
-}
-
-const getHome = async()=>{
-  navigate("/")
-}
+  const getHome = async () => {
+    navigate("/");
+  };
 
   useEffect(() => {
     getProfile();
-    
   }, []);
 
   return (
@@ -82,7 +90,6 @@ const getHome = async()=>{
           >
             Logout
           </button>
-          
         </div>
 
         {/* Adoption Applications Section */}
@@ -115,10 +122,12 @@ const getHome = async()=>{
                   <span className="font-extrabold">Title:</span> {app.title}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-extrabold">Description:</span> {app.description}
+                  <span className="font-extrabold">Description:</span>{" "}
+                  {app.description}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-extrabold">Status:</span> {app.adoptionStatus}
+                  <span className="font-extrabold">Status:</span>{" "}
+                  {app.adoptionStatus}
                 </p>
                 <Link
                   to={`/postInfo/${app._id}`}
