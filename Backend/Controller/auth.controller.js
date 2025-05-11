@@ -5,19 +5,17 @@ import transporter from "../Config/nodemailer.config.js";
 import { v2 as cloudinary } from "cloudinary";
 import { client } from "../Config/redis.js";
 import { validateUser } from "../Models/user.Model.js";
+import { loginUser } from "../Models/user.Model.js";
 
 export const register = async (req, res) => {
-
   const { error } = validateUser(req.body);
-    
-    if (error) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "Good"
-        });
-    }
 
-
+  if (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Good",
+    });
+  }
 
   const { name, email, password, bio } = req.body;
 
@@ -90,6 +88,18 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+
+
+ const { error } = loginUser(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Good",
+    });
+  }
+
+
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -104,7 +114,6 @@ export const login = async (req, res) => {
     cache = JSON.parse(cache) || null;
 
     if (cache && cache.email) {
-
       let decode = await bcrypt.compare(password, cache.password);
 
       if (!decode) {
@@ -186,21 +195,16 @@ export const profile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
+    let cache = await client.del(`user:email:${req.body.email}`);
 
-
-
-  let cache =  await client.del(`user:email:${req.body.email}`)
-
-  if(cache){
-
-    res.cookie("token", "", {
-      httpOnly: true,
-      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "none", // Required for cross-origin cookies
-    });
-   
-  }
-  return res.json({ success: true, message: "Logout" });
+    if (cache) {
+      res.cookie("token", "", {
+        httpOnly: true,
+        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        sameSite: "none", // Required for cross-origin cookies
+      });
+    }
+    return res.json({ success: true, message: "Logout" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

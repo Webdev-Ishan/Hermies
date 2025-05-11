@@ -95,4 +95,44 @@ export const validateUser = (data) => {
   return schema.validate(data);
 };
 
+
+
+export const loginUser = (data) => {
+  const schema = Joi.object({
+  
+
+    email: Joi.string().email().required().messages({
+      "string.email": "Please enter a valid email address",
+      "any.required": "Email is required",
+    }),
+
+    password: Joi.string()
+      .min(8)
+      .max(128)
+      .pattern(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      )
+      .required()
+      .messages({
+        "string.min": "Password must be at least 8 characters",
+        "string.max": "Password must be at most 128 characters",
+        "string.pattern":
+          "Password must contain at least one lowercase letter, uppercase letter, number and special character",
+        "any.required": "Password is required",
+      }),
+
+   
+  });
+
+  return schema.validate(data);
+};
+
+
+
+
+
 export default User;
+
+
+
+
