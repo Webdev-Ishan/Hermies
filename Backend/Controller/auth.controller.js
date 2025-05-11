@@ -4,8 +4,21 @@ import bcrypt from "bcrypt";
 import transporter from "../Config/nodemailer.config.js";
 import { v2 as cloudinary } from "cloudinary";
 import { client } from "../Config/redis.js";
+import { validateUser } from "../Models/user.Model.js";
 
 export const register = async (req, res) => {
+
+  const { error } = validateUser(req.body);
+    
+    if (error) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Good"
+        });
+    }
+
+
+
   const { name, email, password, bio } = req.body;
 
   if (!name || !email | !password) {

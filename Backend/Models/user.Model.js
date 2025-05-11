@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Joi from "joi";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -45,6 +46,53 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const userModel = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-export default userModel;
+// Export both model and validation function
+export const validateUser = (data) => {
+  const schema = Joi.object({
+    name: Joi.string()
+      .min(2)
+      .max(50)
+      .pattern(/^[a-zA-Z\s]*$/)
+      .required()
+      .messages({
+        "string.min": "Name must be at least 2 characters",
+        "string.max": "Name must be at most 50 characters",
+        "string.pattern": "Name must contain only letters and spaces",
+        "any.required": "Name is required",
+      }),
+
+    email: Joi.string().email().required().messages({
+      "string.email": "Please enter a valid email address",
+      "any.required": "Email is required",
+    }),
+
+    password: Joi.string()
+      .min(8)
+      .max(128)
+      .pattern(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      )
+      .required()
+      .messages({
+        "string.min": "Password must be at least 8 characters",
+        "string.max": "Password must be at most 128 characters",
+        "string.pattern":
+          "Password must contain at least one lowercase letter, uppercase letter, number and special character",
+        "any.required": "Password is required",
+      }),
+
+    bio: Joi.string().allow("").max(500).messages({
+      "string.max": "Bio must be at most 500 characters",
+    }),
+
+    profilePicture: Joi.string().uri().allow("").messages({
+      "string.uri": "Profile picture must be a valid URI",
+    }),
+  });
+
+  return schema.validate(data);
+};
+
+export default User;
