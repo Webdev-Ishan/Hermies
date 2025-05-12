@@ -13,6 +13,7 @@ import AIhelp from "./pages/AIhelp";
 import Postsinfo from "./pages/postInfo";
 import Adoption from "./pages/Adoption";
 import Application from "./pages/ApplicationInfo";
+import ApplicationPage from "./pages/viewApplication";
 import Protected from "./Components/Protected";
 
 export const url = "http://localhost:3000";
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/postInfo/:id" element={<Postsinfo />} />
           <Route path="/Adoption/:id" element={<Adoption />} />
           <Route path="/Application/:id" element={<Application />} />
+          <Route path="/Accept/:id" element={<ApplicationPage />} />
         </Routes>
       </Router>
     </>

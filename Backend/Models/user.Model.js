@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   recievedApplications: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Applicatio",
+      ref: "Application",
     },
   ],
   profilePicture: {
@@ -109,9 +109,6 @@ export const loginUser = (data) => {
     password: Joi.string()
       .min(8)
       .max(128)
-      .pattern(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-      )
       .required()
       .messages({
         "string.min": "Password must be at least 8 characters",

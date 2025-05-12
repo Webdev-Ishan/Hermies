@@ -3,6 +3,7 @@ import userModel from "../Models/user.Model.js";
 import { v2 as cloudinary } from "cloudinary";
 import Application from "../Models/application.model.js";
 import transporter from "../Config/nodemailer.config.js";
+import { application } from "express";
 
 export const createPost = async (req, res) => {
   const { title, description, type } = req.body;
@@ -206,6 +207,43 @@ export const cancel = async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     return res.json({ success: true, message: "Application is canceled" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const accept = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.json({ success: false, message: "Application do not exist.." });
+  }
+  try {
+    let application = await Application.findByIdAndUpdate(
+      id,
+      { status: "approved" },
+      { new: true } // return the updated document
+    );
+
+    if (!application) {
+      return res.json({ success: false, message: "Something went wrong" });
+    }
+
+    let user = await userModel.findOne({ _id: application.appliedBy });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Application is Accepted by owner",
+      text: `Congratulations Your application has been accepted by the owner .
+      
+    Application id: ${application._id}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    application.status = "approved";
+    return res.json({ success: true, message: "Accepted", user });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

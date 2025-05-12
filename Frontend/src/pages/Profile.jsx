@@ -17,6 +17,7 @@ const Profile = () => {
   );
   const [application, setApplication] = React.useState([]);
   const [posts, setPosts] = React.useState([]);
+  const [recievedApplications,setrecievedApplications]=React.useState([])
 
   const { logout } = useContext(Authcontext);
   const getProfile = async () => {
@@ -24,6 +25,7 @@ const Profile = () => {
       let response = await axios.get(`${url}/api/auth/profile`, {
         withCredentials: true,
       });
+      console.log(response.data)
 
       if (response.data && response.data.success) {
         setName(response.data.userProfile.name);
@@ -32,6 +34,7 @@ const Profile = () => {
         setDP(response.data.userProfile.profilePicture);
         setApplication(response.data.userProfile.adoptionApplications);
         setPosts(response.data.userProfile.posts);
+        setrecievedApplications(response.data.userProfile.recievedApplications)
       } else {
         toast.error("Something went wrong!!!");
       }
@@ -139,6 +142,36 @@ const Profile = () => {
             ))}
           </div>
         </div>
+
+
+  {/* Recieved Applications Section */}
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+          <h3 className="text-xl font-bold mb-4">Your Recieved Applications</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {recievedApplications.map((app, index) => (
+              <div key={index} className="bg-gray-50 p-4 rounded-lg shadow">
+                <p className="text-gray-600">
+                  <span className="font-extrabold">Status:</span> {app.status}
+                </p>
+                <Link
+                  to={`/application/${app._id}`}
+                  className="mt-4 inline-block bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+                >
+                  Cancel
+                </Link>
+                  <Link
+                  to={`/accept/${app._id}`}
+                  className="mt-4 inline-block m-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+                >
+                  View Details
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+
       </div>
     </div>
   );

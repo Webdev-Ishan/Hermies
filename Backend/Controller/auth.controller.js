@@ -181,7 +181,8 @@ export const profile = async (req, res) => {
     let userProfile = await userModel
       .findById(id)
       .populate("posts", "title description adoptionStatus")
-      .populate("adoptionApplications", "status");
+      .populate("adoptionApplications", "status")
+      .populate("recievedApplications", "status")
 
     if (!userProfile) {
       return res.json({ success: false, message: "something went wrong" });
