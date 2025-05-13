@@ -111,7 +111,12 @@ export const apply = async (req, res) => {
       return res.json({ success: false, message: "NO apply without post" });
     }
 
-    
+    let already = user.posts.includes(id);
+    if(already){
+    return res.json({ success: false, message: "Already Applied" });
+
+    }
+
 
     let application = new Application({
       message: message,
