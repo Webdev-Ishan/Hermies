@@ -16,7 +16,6 @@ import Application from "./pages/ApplicationInfo";
 import ApplicationPage from "./pages/viewApplication";
 import Protected from "./Components/Protected";
 
-
 export const url = "http://localhost:3000";
 
 const App = () => {
@@ -25,24 +24,41 @@ const App = () => {
       <ToastContainer />
       <Router>
         <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route
-            path="/"
+            path="/profile"
             element={
               <Protected>
-                <Homepage />
+                {" "}
+                <Profile />{" "}
               </Protected>
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/pets/:id" element={<PetInfo />} />
           <Route path="/donate" element={<Donation />} />
-          <Route path="/create-post" element={<CreatePost />} />
+          <Route
+            path="/create-post"
+            element={
+              <Protected>
+                {" "}
+                <CreatePost />{" "}
+              </Protected>
+            }
+          />
           <Route path="/all-pets" element={<AllPets />} />
           <Route path="/AIhelp" element={<AIhelp />} />
           <Route path="/postInfo/:id" element={<Postsinfo />} />
-          <Route path="/Adoption/:id" element={<Adoption />} />
+          <Route
+            path="/Adoption/:id"
+            element={
+              <Protected>
+                {" "}
+                <Adoption />{" "}
+              </Protected>
+            }
+          />
           <Route path="/Application/:id" element={<Application />} />
           <Route path="/Accept/:id" element={<ApplicationPage />} />
         </Routes>
