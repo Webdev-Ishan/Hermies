@@ -111,6 +111,8 @@ export const apply = async (req, res) => {
       return res.json({ success: false, message: "NO apply without post" });
     }
 
+    
+
     let application = new Application({
       message: message,
       adminRemarks: adminRemarks,
@@ -248,6 +250,47 @@ export const accept = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+
+
+export const reject = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.json({ success: false, message: "Application do not exist.." });
+  }
+  try {
+    let application = await Application.findByIdAndUpdate(
+      id,
+      { status: "rejected" },
+      { new: true } // return the updated document
+    );
+
+    if (!application) {
+      return res.json({ success: false, message: "Something went wrong" });
+    }
+
+    let user = await userModel.findOne({ _id: application.appliedBy });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Application is Rejected by owner",
+      text: `Better luck next time. .
+      
+    Application id: ${application._id}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    application.status = "approved";
+    return res.json({ success: true, message: "Accepted", user });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+
 
 export const getAll = async (req, res) => {
   try {

@@ -17,6 +17,7 @@ userRouter.get("/getPost/:id",userController.getPost)
 userRouter.post("/apply/:id", apply, userController.apply);
 userRouter.post("/cancel/:id", apply, userController.cancel);
 userRouter.post("/accept/:id",userController.accept)
+userRouter.post("/reject/:id",userController.reject)
 userRouter.get("/getApplications/:id", userController.getApply);
 userRouter.get("/allPosts", authUser, userController.getAll);
 userRouter.get("/petinfo/:id",userController.petinfo);

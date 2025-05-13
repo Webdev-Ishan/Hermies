@@ -14,7 +14,8 @@ const Homepage = () => {
       });
     console.log(response.data)
     if (response.data && response.data.success){
-      setposts(response.data.response);
+      let data = response.data.response.slice(0,3)
+      setposts(data);
     }
 
     } catch (error) {
