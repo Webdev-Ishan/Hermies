@@ -16,6 +16,7 @@ import Application from "./pages/ApplicationInfo";
 import ApplicationPage from "./pages/viewApplication";
 import Protected from "./Components/Protected";
 
+
 export const url = "http://localhost:3000";
 
 const App = () => {
