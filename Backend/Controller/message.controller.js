@@ -10,7 +10,9 @@ export const getMessages = async (req, res) => {
   }
 
   try {
-    let response = await Message.find({ chatroom });
+    let response = await Message.find({ chatroom })
+    .populate("chatroom", "name")
+
     if (!response) {
       return res.json({
         success: false,

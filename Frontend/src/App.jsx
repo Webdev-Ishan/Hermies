@@ -17,6 +17,7 @@ import ApplicationPage from "./pages/viewApplication";
 import Protected from "./Components/Protected";
 import Chatinfo from "./pages/Chatinfo";
 import CreateChat from "./pages/CreateChat";
+import Chat from "./pages/Chat";
 
 export const url = "http://localhost:3000";
 
@@ -81,6 +82,16 @@ const App = () => {
               </Protected>
             }
           />
+       <Route
+            path="/chat/:id"
+            element={
+              <Protected>
+                {" "}
+                <Chat />{" "}
+              </Protected>
+            }
+          />
+
         </Routes>
       </Router>
     </>

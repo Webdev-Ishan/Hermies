@@ -1,13 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, {  useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { url } from "../App";
 import { Star } from "lucide-react";
-import Authcontext from "../Context/AuthContext";
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
-  const { loggedin } = useContext(Authcontext);
+
   const feed = async () => {
     try {
       let response = await axios.get(`${url}/api/user/allposts`, {
@@ -44,9 +43,7 @@ const Homepage = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20"></div>
 
         {/* Top Right Auth Buttons */}
-        {loggedin ? (
-          " "
-        ) : (
+        
           <div className="absolute top-6 right-8 z-20 flex space-x-4">
             <a
               href="/login"
@@ -61,7 +58,7 @@ const Homepage = () => {
               SignUp
             </a>
           </div>
-        )}
+        
         {/* Hero Content */}
         <div className="relative text-center z-10">
           <h1 className="text-5xl font-bold mb-4 text-yellow-400">
