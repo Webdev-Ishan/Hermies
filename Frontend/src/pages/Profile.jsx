@@ -25,7 +25,7 @@ const Profile = () => {
       let response = await axios.get(`${url}/api/auth/profile`, {
         withCredentials: true,
       });
-      console.log(response.data)
+      //console.log(response.data)
 
       if (response.data && response.data.success) {
         setName(response.data.userProfile.name);

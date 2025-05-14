@@ -6,6 +6,10 @@ const ChatSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  createdby: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const Chat = new mongoose.model("Chat", ChatSchema);

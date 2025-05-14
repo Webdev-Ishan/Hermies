@@ -25,17 +25,20 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", () => {
+io.on("connection", (Socket) => {
   console.log("Connected to socketio");
   Socket.on("join", (data) => {
     Socket.broadcaste.emit(`${data} have joined the chat`);
     Socket.emit("You have joined the chat");
   });
-});
 
-Socket.on("disconnect", () => {
+  Socket.on("disconnect", () => {
   Socket.emit("You have disconnected");
 });
+
+});
+
+
 DbConnect();
 cloudConfig();
 await redisconnect();

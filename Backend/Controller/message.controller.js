@@ -1,4 +1,4 @@
-import Message from "../Models/message.Model";
+import Message from "../Models/message.Model.js";
 
 export const getMessages = async (req, res) => {
   const { chatroom } = req.params;
