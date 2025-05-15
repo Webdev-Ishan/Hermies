@@ -10,23 +10,20 @@ let socket = io("http://localhost:3000");
 const Chat = () => {
   const { id } = useParams();
   const [messages, setMessages] = useState([]);
- 
+
   const [input, setInput] = useState("");
-  const [partner,setpartner]=useState("")
+  const [partner, setpartner] = useState("");
 
   const loadchat = async () => {
-    let response = await axios.get(`${url}/api/message/${id}`,{
+    let response = await axios.get(`${url}/api/message/${id}`, {
       withCredentials: true,
     });
     console.log(response.data);
     if (response.data && response.data.success) {
-       setpartner(response.data.response.chatname)
+      setpartner(response.data.response.chatname);
       setMessages(response.data.response);
     }
   };
-
-
-
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -37,20 +34,18 @@ const Chat = () => {
   useEffect(() => {
     loadchat();
 
-   
     const handleResponse = (data) => {
       console.log(`${data}`); // This will now log only once
+      setMessages((prevMessages) => [...prevMessages, data]);
     };
 
     // Setup socket listener inside useEffect to avoid duplicate listeners
-    socket.on('response', handleResponse);
+    socket.on("response", handleResponse);
 
     // Cleanup function to remove the socket listener when component unmounts
     return () => {
-      socket.off('response', handleResponse);
+      socket.off("response", handleResponse);
     };
-
-
   }, []);
 
   return (
@@ -65,13 +60,9 @@ const Chat = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`max-w-xs p-2 rounded-xl text-sm ${
-              msg.sender === "me"
-                ? "bg-blue-500 text-white ml-auto"
-                : "bg-gray-300 text-black mr-auto"
-            }`}
+            className={`max-w-xs p-2 rounded-xl text-sm ${"bg-blue-500 text-white ml-auto"}`}
           >
-            {msg.text}
+            {msg}
           </div>
         ))}
       </div>
