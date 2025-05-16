@@ -1,52 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { url } from "../App";
 
+// Declare socket outside component to persist
 let socket = io("http://localhost:3000");
 
 const Chat = () => {
   const { id } = useParams();
   const [messages, setMessages] = useState([]);
-
   const [input, setInput] = useState("");
-  const [partner, setpartner] = useState("");
+  const [partner, setPartner] = useState(""); // Added missing partner state
 
+  // Load initial chat history
   const loadchat = async () => {
-    let response = await axios.get(`${url}/api/message/${id}`, {
-      withCredentials: true,
-    });
-    console.log(response.data);
-    if (response.data && response.data.success) {
-      setpartner(response.data.response.chatname);
-      setMessages(response.data.response);
+    try {
+      const response = await axios.get(`${url}/api/message/${id}`, {
+        withCredentials: true,
+      });
+      
+      if (response.data && response.data.success) {
+        setMessages(response.data.messages); // adjust according to backend
+        setPartner(response.data.messages.sender || "Unknown");
+      }
+    } catch (error) {
+      console.error("Error loading chat:", error);
     }
   };
 
-  const sendMessage = (e) => {
+  // Send message
+  const sendMessage = async (e) => {
     e.preventDefault();
-    socket.emit("join", input);
+    if (!input.trim()) return;
+
+    const newMessage = {
+      roomId: id,
+      content: input,
+      sender: "me",
+      timestamp: new Date(),
+    };
+
+    // Emit via socket
+    socket.emit("send-message", newMessage);
+
+    // Add locally
+    setMessages((prev) => [...prev, newMessage]);
+
+    // Save to DB
+    try {
+      await axios.post(
+        `${url}/api/message/${id}`,
+        { input, sender: "partner" },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+
     setInput("");
   };
 
   useEffect(() => {
     loadchat();
 
-    const handleResponse = (data) => {
-      console.log(`${data}`); // This will now log only once
-      setMessages((prevMessages) => [...prevMessages, data]);
+    // Join the socket room
+    socket.emit("join-room", id);
+
+    // Handle incoming messages
+    const handleReceive = (data) => {
+      setMessages((prev) => [...prev, data]);
     };
 
-    // Setup socket listener inside useEffect to avoid duplicate listeners
-    socket.on("response", handleResponse);
+    socket.on("receive-message", handleReceive);
 
-    // Cleanup function to remove the socket listener when component unmounts
+    // Cleanup on unmount
     return () => {
-      socket.off("response", handleResponse);
+      socket.off("receive-message", handleReceive);
     };
-  }, []);
+  }, [messages]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -60,9 +92,13 @@ const Chat = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`max-w-xs p-2 rounded-xl text-sm ${"bg-blue-500 text-white ml-auto"}`}
+            className={`max-w-xs p-2 rounded-xl text-sm ${
+              msg.sender === "me"
+                ? "bg-black text-white ml-auto"
+                : "bg-blue-600 text-white mr-auto"
+            }`}
           >
-            {msg}
+            {msg.content || msg.message}
           </div>
         ))}
       </div>

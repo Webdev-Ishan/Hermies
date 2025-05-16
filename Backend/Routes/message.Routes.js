@@ -4,5 +4,6 @@ import { authUser } from "../Middleware/auth.midlleware.js";
 const messageRouter = express.Router();
 
 messageRouter.get("/:chatroom", authUser, messageController.getMessages);
+messageRouter.post("/:chatroom", authUser, messageController.createMessage);
 
 export default messageRouter;

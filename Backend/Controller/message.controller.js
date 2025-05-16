@@ -10,16 +10,38 @@ export const getMessages = async (req, res) => {
   }
 
   try {
-    let response = await Message.find({ chatroom })
-    .populate("chatroom", "name")
+    const messages = await Message.find({ chatId: req.params.chatId });
 
-    if (!response) {
+    if (!messages) {
       return res.json({
         success: false,
         message: "Messages not found for this chatroom",
       });
     }
-    return res.json({ success: true, response });
+    return res.json({ success: true, messages });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const createMessage = async (req, res) => {
+  const { input, sender } = req.body;
+
+  if (!input || !sender) {
+    return res.json({
+      success: false,
+      message: "chatroom is required for messages",
+    });
+  }
+
+  try {
+    const newMsg = await Message.create({
+      chatId: req.params.chatId,
+      sender,
+      content: input,
+    });
+
+    return res.json({ success: true, newMsg });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

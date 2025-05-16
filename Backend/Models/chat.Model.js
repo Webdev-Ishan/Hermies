@@ -1,15 +1,8 @@
 import mongoose from "mongoose";
 
 const ChatSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  createdby: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
+  chatname: String, // e.g., user1 + user2
+  users: [String],  // Max 2 users
 });
 
 const Chat = new mongoose.model("Chat", ChatSchema);
