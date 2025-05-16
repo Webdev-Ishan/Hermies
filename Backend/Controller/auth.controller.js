@@ -88,9 +88,7 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-
-
- const { error } = loginUser(req.body);
+  const { error } = loginUser(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -98,7 +96,6 @@ export const login = async (req, res) => {
       message: "Good",
     });
   }
-
 
   const { email, password } = req.body;
 
@@ -181,8 +178,8 @@ export const profile = async (req, res) => {
     let userProfile = await userModel
       .findById(id)
       .populate("posts", "title description adoptionStatus")
-      .populate("adoptionApplications", "status")
-      .populate("recievedApplications", "status")
+      .populate("adoptionApplications", "status  ")
+      .populate("recievedApplications", "status");
 
     if (!userProfile) {
       return res.json({ success: false, message: "something went wrong" });
@@ -208,5 +205,25 @@ export const logout = async (req, res) => {
     return res.json({ success: true, message: "Logout" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
+  }
+};
+
+export const finduser = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.json({ success: false, message: "User not found without id" });
+  }
+
+  try {
+    let user = await userModel.findById(id);
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    let name = user.name;
+    return res.json({ success: true, name });
+  } catch (error) {
+    return res.json({ success: false, message: "User not found without id" });
   }
 };

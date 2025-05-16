@@ -5,7 +5,7 @@ export const getallChats = async (req, res) => {
   const  id  = req.body.id;
   try {
     let response = await User.findById(id)
-    .populate("chats","name")
+    .populate("chats"," chatname")
 
     if (!response) {
       return res.json({
@@ -30,7 +30,7 @@ export const createChat = async (req, res) => {
   }
 
   try {
-    let exist = await Chat.findOne({name:name });
+    let exist = await Chat.findOne({chatname:name });
 
     if (exist) {
       return res.json({ success: false, message: "ChatRoom already exist" });
@@ -43,8 +43,7 @@ export const createChat = async (req, res) => {
     }
 
     let Chatroom = new Chat({
-      name: name,
-      createdby: id,
+      chatname: name,
     });
 
     await Chatroom.save();

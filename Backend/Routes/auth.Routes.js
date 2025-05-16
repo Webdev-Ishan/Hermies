@@ -8,4 +8,5 @@ authRouter.post("/register", multer.single("profilePicture"),authController.regi
 authRouter.post("/login", authController.login);
 authRouter.get("/profile", authUser, authController.profile);
 authRouter.post("/logout", authController.logout);
+authRouter.get("/user/:id", authController.finduser);
 export default authRouter;
