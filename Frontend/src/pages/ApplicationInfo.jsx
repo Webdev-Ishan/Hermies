@@ -13,7 +13,7 @@ const fetchapply = async()=>{
   let response = await axios.get(`${url}/api/user/getApplications/${id}`,{withCredentials:true});
   //console.log(response.data.application.recieverId)
   setauthorid(response.data.application.recieverId)
-  console.log(authorid)
+  //console.log(response.data.application.recieverId.name)
 }
 
   const handleCancelApplication = async () => {

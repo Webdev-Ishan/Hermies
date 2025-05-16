@@ -19,10 +19,10 @@ const Chat = () => {
       const response = await axios.get(`${url}/api/message/${id}`, {
         withCredentials: true,
       });
-      
+
       if (response.data && response.data.success) {
         setMessages(response.data.messages); // adjust according to backend
-        setPartner(response.data.messages.sender || "Unknown");
+        setPartner(response.data.messages.chatId || "Unknown");
       }
     } catch (error) {
       console.error("Error loading chat:", error);

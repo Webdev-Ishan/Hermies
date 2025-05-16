@@ -12,13 +12,11 @@ const ChatInfo = () => {
     let response = await axios.get(`${url}/api/chat/getallChats`, {
       withCredentials: true,
     });
-console.log(response.data)
+    console.log(response.data);
     if (response.data && response.data.success) {
       setChats(response.data.response.chats);
     }
   };
-
-
 
   useEffect(() => {
     fetchAllchats();
@@ -43,9 +41,8 @@ console.log(response.data)
             {Chats.map((chat, index) => (
               <div key={index} className="bg-gray-50 p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-800">
-                  {chat.name}
+                  {chat.chatname}
                 </h3>
-                <p className="text-gray-600 mt-2">{chat.message}</p>
                 <Link
                   to={`/chat/${chat._id}`}
                   className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"

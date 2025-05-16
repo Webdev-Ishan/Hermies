@@ -1,4 +1,3 @@
-// components/NameForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { url } from "../App";
@@ -8,29 +7,69 @@ import { useNavigate } from "react-router-dom";
 const NameForm = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
-  
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await axios.post(
-      `${url}/api/chat/createRoom/`,
-       {
-          name,
-          
-        },
-        { withCredentials: true } // Include cookies for authentication
+    const chatPartner = await axios.get(`${url}/api/auth/profile`, {
+      withCredentials: true,
+    });
+
+    let applicationIds = [];
+
+    if (
+      chatPartner.data &&
+      chatPartner.data.success &&
+      Array.isArray(chatPartner.data.userProfile?.adoptionApplications)
+    ) {
+      applicationIds = chatPartner.data.userProfile.adoptionApplications;
+    }
+
+    console.log(applicationIds);
+    const onlyIds = applicationIds.map((app) => app._id);
+    console.log(onlyIds);
+
+    const receiverName = await Promise.all(
+      onlyIds.map((appId) =>
+        axios
+          .get(`${url}/api/user/getApplications/${appId}`, {
+            withCredentials: true,
+          })
+          .then((res) => res.data.application.recieverId.name)
+          .catch(() => null)
+      )
     );
 
+    console.log(receiverName);
 
-    if (  response.data && response.data.success) {
-      toast.success("Chat created");
-      setName("");
-      navigate("/AllChats");
-      
+    const validReceivernames = receiverName.filter((name) => name);
+
+    const allowed = validReceivernames.includes(name);
+
+    if (!allowed) {
+      toast.error(
+        "You can only create chat with valid application recipients."
+      );
+      return;
     }
-    else{
-        toast.error("something went wrong")
+
+    try {
+      const response = await axios.post(
+        `${url}/api/chat/createRoom/`,
+        { name },
+        { withCredentials: true }
+      );
+
+      if (response.data?.success) {
+        toast.success("Chat created");
+        setName("");
+        navigate("/AllChats");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("An error occurred");
     }
   };
 
