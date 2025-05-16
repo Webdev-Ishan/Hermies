@@ -336,7 +336,7 @@ export const getApply = async (req, res) => {
   const { id } = req.params;
 
   try {
-    let application = await Application.findOne({ _id: id }).populate("recieverId", "name username")
+    let application = await Application.findOne({ _id: id });
     if (application) {
       return res.json({ success: true, application });
     } else {

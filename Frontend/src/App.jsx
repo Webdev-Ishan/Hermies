@@ -15,9 +15,7 @@ import Adoption from "./pages/Adoption";
 import Application from "./pages/ApplicationInfo";
 import ApplicationPage from "./pages/viewApplication";
 import Protected from "./Components/Protected";
-import Chatinfo from "./pages/Chatinfo";
-import CreateChat from "./pages/CreateChat";
-import Chat from "./pages/Chat";
+
 
 export const url = "http://localhost:3000";
 
@@ -64,33 +62,7 @@ const App = () => {
           />
           <Route path="/Application/:id" element={<Application />} />
           <Route path="/Accept/:id" element={<ApplicationPage />} />
-          <Route
-            path="/AllChats"
-            element={
-              <Protected>
-                {" "}
-                <Chatinfo />{" "}
-              </Protected>
-            }
-          />
-          <Route
-            path="/create-chat"
-            element={
-              <Protected>
-                {" "}
-                <CreateChat />{" "}
-              </Protected>
-            }
-          />
-       <Route
-            path="/chat/:id"
-            element={
-              <Protected>
-                {" "}
-                <Chat />{" "}
-              </Protected>
-            }
-          />
+          
 
         </Routes>
       </Router>

@@ -178,7 +178,7 @@ export const profile = async (req, res) => {
     let userProfile = await userModel
       .findById(id)
       .populate("posts", "title description adoptionStatus")
-      .populate("adoptionApplications", "status  ")
+      .populate("adoptionApplications", "status name ")
       .populate("recievedApplications", "status");
 
     if (!userProfile) {
