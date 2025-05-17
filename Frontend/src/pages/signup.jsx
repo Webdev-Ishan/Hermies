@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { url } from "../App";
 import Profile from "../assets/Profile.webp";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -16,7 +15,7 @@ const Signup = () => {
   const [DP, setDP] = useState("");
 
   const { login } = useContext(Authcontext);
-
+  const url = import.meta.env.VITE_API_URL;
   const submithandeler = async (e) => {
     e.preventDefault();
 

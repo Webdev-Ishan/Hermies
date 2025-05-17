@@ -1,12 +1,12 @@
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { url } from "../App";
 import { Star } from "lucide-react";
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
-
+  const [reviews, setreviews] = React.useState([]);
+  const url = import.meta.env.VITE_API_URL;
   const feed = async () => {
     try {
       let response = await axios.get(`${url}/api/user/allposts`, {
@@ -22,8 +22,21 @@ const Homepage = () => {
     }
   };
 
+  const fetchreview = async () => {
+    try {
+      let response = await axios.get(`${url}/api/review/allReview`);
+      console.log(response.data);
+      if (response.data && response.data.success) {
+        setreviews(response.data.allreviews);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     feed();
+    fetchreview();
   }, []);
 
   return (
@@ -43,22 +56,22 @@ const Homepage = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20"></div>
 
         {/* Top Right Auth Buttons */}
-        
-          <div className="absolute top-6 right-8 z-20 flex space-x-4">
-            <a
-              href="/login"
-              className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Login
-            </a>
-            <a
-              href="/signup"
-              className="bg-yellow-400 text-black font-semibold px-3 py-2 rounded-lg hover:bg-yellow-300 transition"
-            >
-              SignUp
-            </a>
-          </div>
-        
+
+        <div className="absolute top-6 right-8 z-20 flex space-x-4">
+          <a
+            href="/login"
+            className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Login
+          </a>
+          <a
+            href="/signup"
+            className="bg-yellow-400 text-black font-semibold px-3 py-2 rounded-lg hover:bg-yellow-300 transition"
+          >
+            SignUp
+          </a>
+        </div>
+
         {/* Hero Content */}
         <div className="relative text-center z-10">
           <h1 className="text-5xl font-bold mb-4 text-yellow-400">
@@ -152,82 +165,44 @@ const Homepage = () => {
 
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-8">
+          <a
+            href={`/Review`}
+            className="block mb-6 space-x-4 border-2 border-black text-2xl  bg-blue-500 hover:bg-blue-600 text-white text-center py-2 rounded-lg"
+          >
+            Review Us
+          </a>
+          <h2 className="text-4xl mt-4 font-bold text-center mb-8">
             What Pet Lovers Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Review 1 */}
-            <div className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="https://i.pravatar.cc/100?img=1"
-                  alt="Emily Johnson"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="text-lg font-semibold">Emily Johnson</h3>
-                  <div className="flex text-yellow-400">
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
+            {reviews.map((review) => {
+              return (
+                <div className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img
+                      src={review.author.profilePicture}
+                      alt="Emily Johnson"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        {review.author.name}
+                      </h3>
+                      <div className="flex text-yellow-400">
+                        <Star size={16} fill="currentColor" strokeWidth={0} />
+                        <Star size={16} fill="currentColor" strokeWidth={0} />
+                        <Star size={16} fill="currentColor" strokeWidth={0} />
+                        <Star size={16} fill="currentColor" strokeWidth={0} />
+                        <Star size={16} fill="currentColor" strokeWidth={0} />
+                      </div>
+                    </div>
                   </div>
+                  <p className="text-gray-700 text-lg font-bold">
+                    {review.description}
+                  </p>
                 </div>
-              </div>
-              <p className="text-gray-700 text-sm">
-                Adopting through this app was seamless. We found the perfect
-                pet!
-              </p>
-            </div>
-
-            {/* Review 2 */}
-            <div className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="https://i.pravatar.cc/100?img=2"
-                  alt="Liam Brown"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="text-lg font-semibold">Liam Brown</h3>
-                  <div className="flex text-yellow-400">
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="none" strokeWidth={2} />
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 text-sm">
-                The scheduling feature for vet visits is a game changer.
-              </p>
-            </div>
-
-            {/* Review 3 */}
-            <div className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="https://i.pravatar.cc/100?img=3"
-                  alt="Sophia Lee"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="text-lg font-semibold">Sophia Lee</h3>
-                  <div className="flex text-yellow-400">
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                    <Star size={16} fill="currentColor" strokeWidth={0} />
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 text-sm">
-                Super easy to browse pets and get details. Loved the experience!
-              </p>
-            </div>
+              );
+            })}
           </div>
         </div>
       </section>

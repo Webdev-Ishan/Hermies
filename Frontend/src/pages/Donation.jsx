@@ -1,21 +1,20 @@
 import React from "react";
 import axios from "axios";
-import { url } from "../App";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Donation = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [amount, setAmount] = React.useState("");
   const [currency, setCurrency] = React.useState("INR");
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const url = import.meta.env.VITE_API_URL;
 
   const donate = async (e) => {
     e.preventDefault();
 
     try {
-
       let response = await axios.post(
         `${url}/api/payment/donate`,
         { amount, currency },
@@ -28,17 +27,14 @@ const Donation = () => {
         setCurrency("INR");
         setName("");
         setEmail("");
-        navigate('/')
-      }
-      else {
+        navigate("/");
+      } else {
         toast.error("Something went wrong!");
       }
-    } catch(error){
-      toast.error(error.message)
+    } catch (error) {
+      toast.error(error.message);
     }
-     
-    } 
-  
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -47,7 +43,10 @@ const Donation = () => {
         <form onSubmit={donate}>
           {/* Donation Amount */}
           <div className="mb-4">
-            <label htmlFor="amount" className="block text-gray-700 font-medium mb-2">
+            <label
+              htmlFor="amount"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Donation Amount
             </label>
             <input
@@ -62,7 +61,10 @@ const Donation = () => {
 
           {/* Currency Selection */}
           <div className="mb-4">
-            <label htmlFor="currency" className="block text-gray-700 font-medium mb-2">
+            <label
+              htmlFor="currency"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Currency
             </label>
             <select
@@ -79,7 +81,10 @@ const Donation = () => {
 
           {/* Name */}
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+            <label
+              htmlFor="name"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Your Name
             </label>
             <input
@@ -94,7 +99,10 @@ const Donation = () => {
 
           {/* Email */}
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Your Email
             </label>
             <input

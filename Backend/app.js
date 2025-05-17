@@ -9,6 +9,7 @@ import userRouter from "./Routes/user.Routes.js";
 import aiRouter from "./Routes/ai.routes.js";
 import paymentRouter from "./Routes/payment.routes.js";
 import cloudConfig from "./Config/cloudinary.js";
+import reviewRouter from "./Routes/review.Routes.js";
 import { redisconnect } from "./Config/redis.js";
 
 const port = process.env.PORT || 3000;
@@ -34,7 +35,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/payment", paymentRouter);
-
+app.use("/api/review", reviewRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);

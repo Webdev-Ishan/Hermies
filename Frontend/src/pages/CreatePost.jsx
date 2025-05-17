@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { url } from "../App";
 import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
@@ -10,7 +9,7 @@ const CreatePost = () => {
   const [petDescription, setPetDescription] = React.useState("");
   const [petImage, setPetImage] = React.useState("");
   const navigate = useNavigate();
-
+  const url = import.meta.env.VITE_API_URL;
   const submithandeler = async (e) => {
     e.preventDefault();
     let formndata = new FormData();

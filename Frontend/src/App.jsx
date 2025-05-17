@@ -14,11 +14,8 @@ import Postsinfo from "./pages/postInfo";
 import Adoption from "./pages/Adoption";
 import Application from "./pages/ApplicationInfo";
 import ApplicationPage from "./pages/viewApplication";
+import Review from "./pages/review";
 import Protected from "./Components/Protected";
-
-
-export const url = "http://localhost:3000";
-
 const App = () => {
   return (
     <>
@@ -62,8 +59,15 @@ const App = () => {
           />
           <Route path="/Application/:id" element={<Application />} />
           <Route path="/Accept/:id" element={<ApplicationPage />} />
-          
-
+          <Route
+            path="/Review"
+            element={
+              <Protected>
+                {" "}
+                <Review />{" "}
+              </Protected>
+            }
+          />
         </Routes>
       </Router>
     </>

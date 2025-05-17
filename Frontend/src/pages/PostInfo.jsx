@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { url } from "../App";
 
 const PostInfo = () => {
   const { id } = useParams(); // Extract post ID from the URL
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
   // Fetch post details
   const fetchPostInfo = async () => {
     try {
@@ -26,7 +26,11 @@ const PostInfo = () => {
   };
 
   const deletePost = async () => {
-    let result = await axios.post(`${url}/api/user/deletePost/${id}`,{id},{withCredentials:true,});
+    let result = await axios.post(
+      `${url}/api/user/deletePost/${id}`,
+      { id },
+      { withCredentials: true }
+    );
     if (result.data && result.data.success) {
       toast.success("Post deleted");
       navigate("/profile");

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { url } from "../App";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
@@ -10,7 +9,7 @@ const ApplicationPage = () => {
   let navigate = useNavigate();
   const [Title, settitle] = useState("");
   const [message, setmessage] = useState("");
-
+  const url = import.meta.env.VITE_API_URL;
   const fetchapply = async () => {
     let response = await axios.get(`${url}/api/user/getApplications/${id}`, {
       withCredentials: true,

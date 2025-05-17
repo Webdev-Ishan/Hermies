@@ -2,48 +2,44 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { url } from "../App";
 
 const ApplicationInfo = () => {
   const navigate = useNavigate();
-const [authorid,setauthorid] = useState("");
+  const [authorid, setauthorid] = useState("");
   const { id } = useParams();
-
-const fetchapply = async()=>{
-  let response = await axios.get(`${url}/api/user/getApplications/${id}`,{withCredentials:true});
-  //console.log(response.data.application.recieverId)
-  setauthorid(response.data.application.recieverId)
-  //console.log(response.data.application.recieverId.name)
-}
-
-  const handleCancelApplication = async () => {
-
-    try {
-
-     
-        let result = await axios.post(
-            `${url}/api/user/cancel/${id}`,
-            { id,recieverId: authorid  },
-            {withCredentials:true,}
-          );
-
-          console.log(result.data)
-          if (result.data.success) {
-            toast.success("Application cancelled");
-            navigate("/");
-          } else {
-            toast.error("Somethign went wrong");
-          }
-    } catch (error) {
-        toast.error(error.message);
-    }
-  
+  const url = import.meta.env.VITE_API_URL;
+  const fetchapply = async () => {
+    let response = await axios.get(`${url}/api/user/getApplications/${id}`, {
+      withCredentials: true,
+    });
+    //console.log(response.data.application.recieverId)
+    setauthorid(response.data.application.recieverId);
+    //console.log(response.data.application.recieverId.name)
   };
 
+  const handleCancelApplication = async () => {
+    try {
+      let result = await axios.post(
+        `${url}/api/user/cancel/${id}`,
+        { id, recieverId: authorid },
+        { withCredentials: true }
+      );
 
-  useEffect(()=>{
-    fetchapply()
-  })
+      console.log(result.data);
+      if (result.data.success) {
+        toast.success("Application cancelled");
+        navigate("/");
+      } else {
+        toast.error("Somethign went wrong");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchapply();
+  });
   return (
     <div
       style={{

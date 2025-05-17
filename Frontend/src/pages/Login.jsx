@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { url } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import Authcontext from "../Context/AuthContext";
@@ -12,7 +11,8 @@ const Login = () => {
   const { login } = useContext(Authcontext);
   const submithandeler = async (e) => {
     e.preventDefault();
-
+    const url = import.meta.env.VITE_API_URL;
+    console.log(url)
     try {
       let response = await axios.post(
         `${url}/api/auth/login`,

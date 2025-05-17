@@ -3,7 +3,7 @@ import userModel from "../Models/user.Model.js";
 import { v2 as cloudinary } from "cloudinary";
 import Application from "../Models/application.model.js";
 import transporter from "../Config/nodemailer.config.js";
-import { application } from "express";
+
 
 export const createPost = async (req, res) => {
   const { title, description, type } = req.body;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { url } from "../App";
-import { useParams,Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const Petinfo = () => {
   const [image, setimage] = useState(null);
@@ -11,7 +10,7 @@ const Petinfo = () => {
   const [author, setauthor] = useState("");
   const [type, settype] = useState("");
   const { id } = useParams();
-
+  const url = import.meta.env.VITE_API_URL;
   const pet = async () => {
     try {
       let response = await axios.get(`${url}/api/user/petinfo/${id}`);

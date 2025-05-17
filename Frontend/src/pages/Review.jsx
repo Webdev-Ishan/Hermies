@@ -1,41 +1,33 @@
 import React, { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Adoption = () => {
-  const { id } = useParams(); // Extract the post ID from the URL
-  const [message, setMessage] = useState("");
-  const [adminRemarks, setadminremarks] = useState("");
+const Review = () => {
+  const [title, settitle] = useState("");
+  const [description, setdescription] = useState("");
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(
-        `${url}/api/user/apply/${id}`,
-        {
-          id, // Send the post ID
-          adminRemarks,
-          message, // Send the user's message
-        },
-        { withCredentials: true } // Include cookies for authentication
-      );
+    let response = await axios.post(
+      `${url}/api/review/sendReview`,
+      {
+        title,
+        description,
+      },
+      { withCredentials: true }
+    );
+    console.log(response);
 
-      if (response.data && response.data.success) {
-        toast.success("Application submitted successfully!");
-        setMessage("");
-        setadminremarks("");
-        navigate("/profile"); // Redirect to the profile page
-      } else if (response.data.message == "Already Applied") {
-        toast.success("Application Already Applied");
-        navigate("/"); // Redirect to the profile page
-      } else {
-        toast.error(response.data.message || "Failed to submit application.");
-      }
-    } catch (error) {
-      toast.error(error.message || "Something went wrong.");
+    if (response.data && response.data.success) {
+      toast.success("Review is submitted successfully!!");
+      settitle("");
+      setdescription("");
+      navigate("/");
+    } else {
+      toast.error("Something went wrong");
     }
   };
 
@@ -44,7 +36,7 @@ const Adoption = () => {
       <div className="container mx-auto px-4">
         <div className="bg-white p-8 rounded-lg shadow-2xl border-2 border-black">
           <h1 className="text-4xl font-extrabold mb-6 text-center text-blue-500">
-            Apply for Adoption
+            Give us a Review
           </h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="mb-4">
@@ -52,14 +44,14 @@ const Adoption = () => {
                 htmlFor="adminRemarks"
                 className="block text-gray-700 font-semibold mb-2"
               >
-                Special Remarks
+                Title for Review
               </label>
               <input
                 type="text"
                 id="adminRemarks"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={adminRemarks}
-                onChange={(e) => setadminremarks(e.target.value)}
+                value={title}
+                onChange={(e) => settitle(e.target.value)}
                 placeholder="Enter some special remark"
               />
             </div>
@@ -68,12 +60,12 @@ const Adoption = () => {
                 htmlFor="message"
                 className="block text-gray-700 font-semibold mb-2"
               >
-                Why do you want to adopt this pet?
+                Please give your reviews
               </label>
               <textarea
                 id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                value={description}
+                onChange={(e) => setdescription(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="5"
                 placeholder="Write your message here..."
@@ -94,4 +86,4 @@ const Adoption = () => {
   );
 };
 
-export default Adoption;
+export default Review;

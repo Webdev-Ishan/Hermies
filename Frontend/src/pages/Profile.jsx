@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { url } from "../App";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import Authcontext from "../Context/AuthContext";
@@ -17,8 +16,8 @@ const Profile = () => {
   );
   const [application, setApplication] = React.useState([]);
   const [posts, setPosts] = React.useState([]);
-  const [recievedApplications,setrecievedApplications]=React.useState([])
-
+  const [recievedApplications, setrecievedApplications] = React.useState([]);
+  const url = import.meta.env.VITE_API_URL;
   const { logout } = useContext(Authcontext);
   const getProfile = async () => {
     try {
@@ -34,7 +33,7 @@ const Profile = () => {
         setDP(response.data.userProfile.profilePicture);
         setApplication(response.data.userProfile.adoptionApplications);
         setPosts(response.data.userProfile.posts);
-        setrecievedApplications(response.data.userProfile.recievedApplications)
+        setrecievedApplications(response.data.userProfile.recievedApplications);
       } else {
         toast.error("Something went wrong!!!");
       }
@@ -143,8 +142,7 @@ const Profile = () => {
           </div>
         </div>
 
-
-  {/* Recieved Applications Section */}
+        {/* Recieved Applications Section */}
         <div className="bg-white p-8 rounded-lg shadow-lg">
           <h3 className="text-xl font-bold mb-4">Your Recieved Applications</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -159,7 +157,7 @@ const Profile = () => {
                 >
                   Cancel
                 </Link>
-                  <Link
+                <Link
                   to={`/accept/${app._id}`}
                   className="mt-4 inline-block m-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
                 >
@@ -169,9 +167,6 @@ const Profile = () => {
             ))}
           </div>
         </div>
-
-
-
       </div>
     </div>
   );
