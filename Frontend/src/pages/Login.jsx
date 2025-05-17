@@ -12,7 +12,7 @@ const Login = () => {
   const submithandeler = async (e) => {
     e.preventDefault();
     const url = import.meta.env.VITE_API_URL;
-    console.log(url)
+    console.log(url);
     try {
       let response = await axios.post(
         `${url}/api/auth/login`,
@@ -31,7 +31,6 @@ const Login = () => {
         login();
         naviagte("/profile");
       } else {
-        console.log("Something went wrong", response);
         toast.error("Something went wrong");
       }
     } catch (error) {

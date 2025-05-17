@@ -27,7 +27,7 @@ const ApplicationPage = () => {
       }
     );
 
-    console.log(result);
+    
     if (result.data.success) {
       toast.success("Application accepted");
       navigate("/");

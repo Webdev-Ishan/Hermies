@@ -25,7 +25,6 @@ const ApplicationInfo = () => {
         { withCredentials: true }
       );
 
-      console.log(result.data);
       if (result.data.success) {
         toast.success("Application cancelled");
         navigate("/");

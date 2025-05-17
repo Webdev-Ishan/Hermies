@@ -19,8 +19,6 @@ const Review = () => {
       },
       { withCredentials: true }
     );
-    console.log(response);
-
     if (response.data && response.data.success) {
       toast.success("Review is submitted successfully!!");
       settitle("");

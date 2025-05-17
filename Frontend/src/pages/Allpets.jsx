@@ -13,7 +13,6 @@ const Allpets = () => {
       });
       if (response.data && response.data.success) {
         setpets(response.data.response);
-        console.log(response);
       }
     } catch (error) {
       toast.error(error.message);

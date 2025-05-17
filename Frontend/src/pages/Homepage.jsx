@@ -12,7 +12,7 @@ const Homepage = () => {
       let response = await axios.get(`${url}/api/user/allposts`, {
         withCredentials: true,
       });
-      console.log(response.data);
+
       if (response.data && response.data.success) {
         let data = response.data.response.slice(0, 3);
         setposts(data);

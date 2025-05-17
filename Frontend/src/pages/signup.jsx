@@ -45,7 +45,6 @@ const Signup = () => {
         login();
         navigate("/");
       } else {
-        console.log("Something went wrong", response);
         toast.error("Something went wrong");
       }
     } catch (error) {

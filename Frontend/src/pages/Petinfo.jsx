@@ -14,7 +14,7 @@ const Petinfo = () => {
   const pet = async () => {
     try {
       let response = await axios.get(`${url}/api/user/petinfo/${id}`);
-      console.log(response.data);
+
       if (response.data && response.data.success) {
         settile(response.data.petition.title);
         setdescription(response.data.petition.description);

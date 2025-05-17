@@ -18,7 +18,6 @@ const AIhelp = () => {
         { withCredentials: true }
       );
 
-      console.log(Response.data);
       if (Response.data && Response.data.success) {
         setSuggestion(Response.data.message);
       } else {
