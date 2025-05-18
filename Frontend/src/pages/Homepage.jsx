@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import bg from "../assets/bg.mp4"
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
@@ -74,18 +76,30 @@ const Homepage = () => {
 
         {/* Hero Content */}
         <div className="relative text-center z-10">
-          <h1 className="text-5xl font-bold mb-4 text-yellow-400">
+          <motion.h1
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className="text-5xl font-bold mb-4 text-yellow-400"
+          >
             Welcome to Hermies
-          </h1>
+          </motion.h1>
           <p className="text-lg mb-6">
             Your one-stop platform for pet adoption and care.
           </p>
-          <a
-            href="/all-pets"
-            className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg"
-          >
-            Explore All Pets
-          </a>
+          <AnimatePresence>
+            <motion.a
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              href="/all-pets"
+              className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg"
+            >
+              Explore All Pets
+            </motion.a>
+          </AnimatePresence>
           <a
             href="/Aihelp"
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg"
@@ -101,7 +115,12 @@ const Homepage = () => {
           <h2 className="text-4xl font-bold text-center mb-8">Featured Pets</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {posts.map((post) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                viewport={{ once: true, amount: 0.2 }}
                 className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden"
                 key={post._id}
               >
@@ -127,9 +146,32 @@ const Homepage = () => {
                     View Details
                   </a>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="relative border-t-2 border-b-2 border-black h-screen flex items-center justify-center text-white">
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-100"
+          src={bg}
+          autoPlay
+          loop
+          muted
+        ></video>
+        <div className="relative text-center z-10">
+          <motion.h1
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className="text-6xl font-bold mb-4 text-white"
+          >
+            MAKE AN IMPACT ON A PET'S LIFE
+            <br />
+            JOIN HERMIES PLEASE
+          </motion.h1>
         </div>
       </section>
 
@@ -177,7 +219,14 @@ const Homepage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {reviews.map((review) => {
               return (
-                <div className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1.5, y: 0 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="bg-white shadow-lg border-2 border-black rounded-lg overflow-hidden p-6"
+                >
                   <div className="flex items-center gap-4 mb-4">
                     <img
                       src={review.author.profilePicture}
@@ -200,7 +249,7 @@ const Homepage = () => {
                   <p className="text-gray-700 text-lg font-bold">
                     {review.description}
                   </p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
