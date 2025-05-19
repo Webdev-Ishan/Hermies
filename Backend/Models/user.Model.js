@@ -40,12 +40,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "default-profile.png",
   },
-  chats: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Chat",
-    },
-  ],
+
   bio: {
     type: String,
     trim: true,
