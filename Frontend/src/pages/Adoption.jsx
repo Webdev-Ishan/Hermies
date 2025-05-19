@@ -42,15 +42,21 @@ const Adoption = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-200 py-10">
       <div className="container mx-auto px-4">
-        <div className="bg-white p-8 rounded-lg shadow-2xl border-2 border-black">
-          <h1 className="text-4xl font-extrabold mb-6 text-center text-blue-500">
+        <div className="bg-white p-8 rounded-lg shadow-4xl border-2 border-black">
+          <h1
+            style={{
+              WebkitTextStrokeWidth: "1px",
+              WebkitTextStrokeColor: "black",
+            }}
+            className="text-4xl font-extrabold mb-6 text-center text-blue-500"
+          >
             Apply for Adoption
           </h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="mb-4">
               <label
                 htmlFor="adminRemarks"
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-black font-semibold mb-2"
               >
                 Special Remarks
               </label>
@@ -66,7 +72,7 @@ const Adoption = () => {
             <div className="mb-4">
               <label
                 htmlFor="message"
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-black font-semibold mb-2"
               >
                 Why do you want to adopt this pet?
               </label>
@@ -83,7 +89,7 @@ const Adoption = () => {
             <a
               href="#"
               onClick={handleSubmit}
-              className="block text-center w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 font-bold text-lg"
+              className="block border-2 border-black text-center w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 font-bold text-lg"
             >
               Submit Application
             </a>

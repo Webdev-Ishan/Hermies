@@ -20,6 +20,7 @@ const AIhelp = () => {
 
       if (Response.data && Response.data.success) {
         setSuggestion(Response.data.message);
+        setPrompt("");
       } else {
         toast.error("Something went wrong");
       }
@@ -38,6 +39,7 @@ const AIhelp = () => {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
+     
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl border-2 border-yellow-500">
         <h2 className="text-2xl font-bold text-center mb-6">
           Ask Hermies for the Perfect Pet!

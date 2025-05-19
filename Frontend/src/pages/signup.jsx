@@ -5,6 +5,7 @@ import Profile from "../assets/Profile.webp";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import Authcontext from "../Context/AuthContext";
+import bg from "../assets/bg2.mp4";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -54,15 +55,30 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-3 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-3">Sign Up</h2>
+    <div className="min-h-screen bg-gray-100 flex items-cente  justify-center">
+       <video
+              className="absolute top-0  left-0 w-full h-full object-cover"
+              src={bg}
+              autoPlay
+              loop
+              muted
+            ></video>
+      <div className="bg-black mt-2 border-2 border-blue-600 text-white absolute p-3 rounded-lg shadow-lg w-full max-w-md">
+        <h2
+          className="text-4xl font-bold text-center  text-blue-600 mb-6"
+          style={{
+            WebkitTextStrokeWidth: "1px",
+            WebkitTextStrokeColor: "green",
+          }}
+        >
+          Login
+        </h2>
         <form onSubmit={submithandeler}>
           {/* Name */}
-          <div className="mb-4">
+          <div className="mb-2">
             <label
               htmlFor="name"
-              className="block text-gray-700 font-medium mb-1"
+              className="block text-white font-medium "
             >
               Name
             </label>
@@ -74,7 +90,7 @@ const Signup = () => {
                 setname(e.target.value);
               }}
               placeholder="Enter your name"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 bg-white text-black py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -82,7 +98,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-gray-700 font-medium mb-1"
+              className="block text-white font-medium "
             >
               Email
             </label>
@@ -94,7 +110,7 @@ const Signup = () => {
                 setemail(e.target.value);
               }}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 bg-white text-black py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -102,7 +118,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-gray-700 font-medium mb-1"
+              className="block text-white font-medium "
             >
               Password
             </label>
@@ -114,7 +130,7 @@ const Signup = () => {
                 setpassword(e.target.value);
               }}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 bg-white text-black py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -122,7 +138,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="bio"
-              className="block text-gray-700 font-medium mb-1"
+              className="block text-white font-medium"
             >
               Bio
             </label>
@@ -134,7 +150,7 @@ const Signup = () => {
                 setbio(e.target.value);
               }}
               placeholder="Enter your bio here"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border bg-white text-black  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -142,7 +158,7 @@ const Signup = () => {
             <label
               htmlFor="DP"
               src={Profile}
-              className="block text-gray-700 font-medium mb-1"
+              className="block text-white font-medium "
             >
               Profile Picture
             </label>
@@ -152,7 +168,7 @@ const Signup = () => {
               accept="image/*"
               name="profilePicture" // This must match the backend field name
               onChange={(e) => setDP(e.target.files[0])}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 

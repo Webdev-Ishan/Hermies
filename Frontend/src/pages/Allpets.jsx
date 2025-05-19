@@ -34,6 +34,10 @@ const Allpets = () => {
           whileHover={{ scale: 1.05, y: -5 }}
           transition={{ type: "spring", stiffness: 300 }}
           className="text-5xl font-bold text-shadow-md text-shadow-amber-400  text-center text-yellow-500 mb-10"
+          style={{
+            WebkitTextStrokeWidth: "1px",
+            WebkitTextStrokeColor: "black",
+          }}
         >
           FEATURED PETS
         </motion.h1>

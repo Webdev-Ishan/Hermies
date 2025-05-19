@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import bg from "../assets/bg2.mp4";
 
 const CreatePost = () => {
   const [Title, setTitle] = React.useState("");
@@ -49,15 +50,28 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Create a Post</h2>
+    <div className="min-h-[90vh] bg-gray-100 flex items-center justify-center relative overflow-hidden">
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src={bg}
+        autoPlay
+        loop
+        muted
+      ></video>
+      {/* Optional dark overlay for better contrast */}
+      <div className="absolute inset-0 bg-black opacity-0"></div>
+
+      <div className="relative z-10 border border-blue-600 bg-black/90 px-4 py-6 md:p-8 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-500">
+          Create a Post
+        </h2>
+
         <form onSubmit={submithandeler}>
-          {/* Pet Name */}
-          <div className="mb-4">
+          {/* Title */}
+          <div className="mb-4 text-white">
             <label
               htmlFor="petName"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-500 text-base font-medium mb-2"
             >
               Title
             </label>
@@ -67,15 +81,15 @@ const CreatePost = () => {
               value={Title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter pet's name"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-white text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Pet Type */}
-          <div className="mb-4">
+          <div className="mb-4 text-white">
             <label
               htmlFor="petType"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-500 text-base font-medium mb-2"
             >
               Type
             </label>
@@ -83,7 +97,7 @@ const CreatePost = () => {
               id="petType"
               value={petType}
               onChange={(e) => setPetType(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-white text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select pet type</option>
               <option value="dog">Dog</option>
@@ -94,11 +108,11 @@ const CreatePost = () => {
             </select>
           </div>
 
-          {/* Pet Description */}
-          <div className="mb-4">
+          {/* Description */}
+          <div className="mb-4 text-white">
             <label
               htmlFor="petDescription"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-500 text-base font-medium mb-2"
             >
               Description
             </label>
@@ -106,19 +120,17 @@ const CreatePost = () => {
               id="petDescription"
               placeholder="Enter a description for the pet"
               value={petDescription}
-              onChange={(e) => {
-                setPetDescription(e.target.value);
-              }}
+              onChange={(e) => setPetDescription(e.target.value)}
               rows="4"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-white text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
 
-          {/* Pet Image */}
-          <div className="mb-4">
+          {/* Image Upload */}
+          <div className="mb-4 text-white">
             <label
               htmlFor="petImage"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-500 text-base font-medium mb-2"
             >
               Upload Pet Image
             </label>
@@ -126,14 +138,14 @@ const CreatePost = () => {
               type="file"
               id="petImage"
               onChange={(e) => setPetImage(e.target.files[0])}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-white text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full bg-blue-600 border-white border text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Post
           </button>

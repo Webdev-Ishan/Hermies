@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Petinfo = () => {
   const [image, setimage] = useState(null);
@@ -37,13 +38,19 @@ const Petinfo = () => {
       <div className="bg-white border-2 border-blue-500 p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Pet Image */}
-          <div className="hover:opacity-90 duration-300">
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.1, y: -5 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className="hover:opacity-90 duration-300"
+          >
             <img
               src={image}
               alt="Buddy"
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full border-2 border-black shadow-lg  h-64 object-cover rounded-lg"
             />
-          </div>
+          </motion.div>
 
           {/* Pet Details */}
           <div>
@@ -60,7 +67,7 @@ const Petinfo = () => {
             </p>
             <Link
               to={`/Adoption/${id}`}
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+              className="bg-blue-500 border-2 border-black text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
             >
               Apply for Adoption
             </Link>

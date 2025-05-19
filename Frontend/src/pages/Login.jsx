@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import Authcontext from "../Context/AuthContext";
+import bg from "../assets/bg2.mp4";
 const Login = () => {
   const naviagte = useNavigate();
   const [email, setemail] = useState("");
@@ -40,14 +41,29 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src={bg}
+        autoPlay
+        loop
+        muted
+      ></video>
+      <div className="bg-black text-white absolute border-2 border-blue-600 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2
+          className="text-4xl font-bold text-center text-blue-600 mb-6"
+          style={{
+            WebkitTextStrokeWidth: "1px",
+            WebkitTextStrokeColor: "green",
+          }}
+        >
+          Login
+        </h2>
         <form onSubmit={submithandeler}>
           {/* Email Input */}
-          <div className="mb-4">
+          <div className="mb-4 ">
             <label
               htmlFor="email"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-600 font-medium mb-2"
             >
               Email
             </label>
@@ -57,7 +73,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setemail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 bg-white text-black py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -65,7 +81,7 @@ const Login = () => {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-600 font-medium mb-2"
             >
               Password
             </label>
@@ -75,7 +91,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setpassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-white text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 

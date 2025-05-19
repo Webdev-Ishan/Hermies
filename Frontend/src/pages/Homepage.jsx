@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import bg from "../assets/bg.mp4"
+import bg from "../assets/bg.mp4";
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
@@ -82,6 +82,10 @@ const Homepage = () => {
             whileHover={{ scale: 1.05, y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="text-5xl font-bold mb-4 text-yellow-400"
+            style={{
+              WebkitTextStrokeWidth: "1px",
+              WebkitTextStrokeColor: "black",
+            }}
           >
             Welcome to Hermies
           </motion.h1>
@@ -95,16 +99,16 @@ const Homepage = () => {
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ type: "spring", stiffness: 300 }}
               href="/all-pets"
-              className="bg-blue-500 hover:bg-blue-600 mr-4 text-white font-bold py-3 px-6 rounded-lg"
+              className="bg-blue-500 hover:bg-blue-600 border-2 duration-300 border-black hover:border-green-400 mr-4 text-white font-bold py-3 px-6 rounded-lg"
             >
-              Explore All Pets
+              EXPLORE ALL PETS
             </motion.a>
           </AnimatePresence>
           <a
             href="/Aihelp"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg"
+            className="bg-blue-500 hover:bg-blue-600 border-2 duration-300 border-black hover:border-green-400 text-white font-bold py-3 px-6 rounded-lg"
           >
-            Ask from AI
+            ASK FROM AI
           </a>
         </div>
       </section>
@@ -167,6 +171,10 @@ const Homepage = () => {
             whileHover={{ scale: 1.05, y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="text-6xl font-bold mb-4 text-white"
+            style={{
+              WebkitTextStrokeWidth: "3px",
+              WebkitTextStrokeColor: "black",
+            }}
           >
             MAKE AN IMPACT ON A PET'S LIFE
             <br />
@@ -183,25 +191,37 @@ const Homepage = () => {
         <p className="text-lg mb-6">
           Join our community and make a difference in a pet's life today.
         </p>
-        <div className="flex justify-center gap-4">
-          <a
+        <div className="flex justify-center gap-4 ">
+          <motion.a
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
             href="/create-post"
             className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             Post a Pet
-          </a>
-          <a
+          </motion.a>
+          <motion.a
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
             href="/donate"
             className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             Donate
-          </a>
-          <a
+          </motion.a>
+          <motion.a
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
             href="/profile"
             className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             View Profile
-          </a>
+          </motion.a>
         </div>
       </section>
 

@@ -38,7 +38,7 @@ const Donation = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+      <div className="bg-white border-2 border-black p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h2 className="text-2xl font-bold text-center mb-6">Make a Donation</h2>
         <form onSubmit={donate}>
           {/* Donation Amount */}
@@ -118,7 +118,7 @@ const Donation = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full border-2 border-black bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
           >
             Donate Now
           </button>
