@@ -62,7 +62,7 @@ const Homepage = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log(position.coords);
+          
           const { latitude, longitude } = position.coords;
 
           // Add user marker
