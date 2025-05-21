@@ -48,7 +48,7 @@ const Homepage = () => {
     feed();
     fetchreview();
 
-    socketRef.current = io("http://localhost:3000"); // change to your backend
+    socketRef.current = io(import.meta.env.VITE_API_URL); // change to your backend
 
     // Initialize Leaflet map
     const map = L.map(mapRef.current).setView([22.9734, 78.6569], 5); // center on India
