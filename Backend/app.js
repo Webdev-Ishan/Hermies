@@ -11,11 +11,21 @@ import paymentRouter from "./Routes/payment.routes.js";
 import cloudConfig from "./Config/cloudinary.js";
 import reviewRouter from "./Routes/review.Routes.js";
 import { redisconnect } from "./Config/redis.js";
+import { Server } from "socket.io";
+import http from "http";
 
 const port = process.env.PORT || 3000;
 
 const app = express();
-
+const server = http.createServer(app);
+const io = new Server(
+  server,{
+  cors:{
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    credentials: true,
+  }
+}
+);
 
 DbConnect();
 cloudConfig();
@@ -37,6 +47,13 @@ app.use("/api/ai", aiRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/review", reviewRouter);
 
-app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log("Connected",socket.id);
+  socket.on('geo-location',(data)=>{
+    socket.emit("locations",{id:socket.id,...data})
+  })
+});
+
+server.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });

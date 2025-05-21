@@ -1,15 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Star } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import bg from "../assets/bg.mp4";
+import { io } from "socket.io-client";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
   const [reviews, setreviews] = React.useState([]);
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const socketRef = useRef(null);
   const url = import.meta.env.VITE_API_URL;
+
   const feed = async () => {
     try {
       let response = await axios.get(`${url}/api/user/allposts`, {
@@ -40,6 +47,96 @@ const Homepage = () => {
   useEffect(() => {
     feed();
     fetchreview();
+
+    socketRef.current = io("http://localhost:3000"); // change to your backend
+
+    // Initialize Leaflet map
+    const map = L.map(mapRef.current).setView([22.9734, 78.6569], 5); // center on India
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    // ✅ Get user's location and emit it via socket
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          // Add user marker
+          markerRef.current = L.marker([latitude, longitude])
+            .addTo(map)
+            .bindPopup("You are here")
+            .openPopup();
+
+          map.setView([latitude, longitude], 12);
+
+          // Emit location to socket
+          socketRef.current.emit("geo-location", { latitude, longitude });
+        },
+        (error) => {
+          console.log("Geolocation error:", error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
+    }
+
+    // ✅ Listen for others' locations (optional)
+    socketRef.current.on("location", ({ latitude, longitude }) => {
+      L.circleMarker([latitude, longitude], {
+        radius: 6,
+        color: "blue",
+        fillOpacity: 0.5,
+      })
+        .addTo(map)
+        .bindPopup("Another user is here");
+    });
+
+    // ✅ Fetch vet clinics
+    const query = `
+      [out:json][timeout:25];
+      area["name"="India"]->.searchArea;
+      (
+        node["amenity"="veterinary"](area.searchArea);
+        way["amenity"="veterinary"](area.searchArea);
+        relation["amenity"="veterinary"](area.searchArea);
+      );
+      out center;
+    `;
+
+    fetch("https://overpass-api.de/api/interpreter", {
+      method: "POST",
+      body: query,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.elements.forEach((element) => {
+          const lat = element.lat || element.center?.lat;
+          const lon = element.lon || element.center?.lon;
+          const name = element.tags?.name || "Unnamed Vet Clinic";
+
+          if (lat && lon) {
+            L.marker([lat, lon])
+              .addTo(map)
+              .bindPopup(`<strong>${name}</strong>`);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error("Vet clinic fetch error:", err);
+      });
+
+    // Cleanup
+    return () => {
+      if (map) map.remove();
+      socketRef.current.disconnect();
+    };
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -225,7 +322,18 @@ const Homepage = () => {
           </motion.a>
         </div>
       </section>
-
+      <div className="border-2 border-black">
+        <h2 className="text-3xl font-bold mb-2 text-center text-yellow-400" style={{
+              WebkitTextStrokeWidth: "1px",
+              WebkitTextStrokeColor: "black",
+            }}>Major Vet Clinics in India <span className="text-blue-600"> (With Live User Location)</span> </h2>
+        <div
+          id="map"
+          ref={mapRef}
+          style={{ height: "600px", width: "100%", borderRadius: "10px" }}
+          className="border-t-2 border-black"
+        ></div>
+      </div>
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
           <a
