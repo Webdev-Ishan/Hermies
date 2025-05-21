@@ -62,13 +62,11 @@ const Homepage = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log(position.coords);
           const { latitude, longitude } = position.coords;
 
           // Add user marker
-          markerRef.current = L.marker([latitude, longitude])
-            .addTo(map)
-            .bindPopup("You are here")
-            .openPopup();
+          markerRef.current = L.marker([latitude, longitude]).addTo(map);
 
           map.setView([latitude, longitude], 12);
 
@@ -85,17 +83,6 @@ const Homepage = () => {
         }
       );
     }
-
-    // ✅ Listen for others' locations (optional)
-    socketRef.current.on("location", ({ latitude, longitude }) => {
-      L.circleMarker([latitude, longitude], {
-        radius: 6,
-        color: "blue",
-        fillOpacity: 0.5,
-      })
-        .addTo(map)
-        .bindPopup("Another user is here");
-    });
 
     // ✅ Fetch vet clinics
     const query = `
@@ -322,11 +309,17 @@ const Homepage = () => {
           </motion.a>
         </div>
       </section>
-      <div className="border-2 border-black">
-        <h2 className="text-3xl font-bold mb-2 text-center text-yellow-400" style={{
-              WebkitTextStrokeWidth: "1px",
-              WebkitTextStrokeColor: "black",
-            }}>Major Vet Clinics in India <span className="text-blue-600"> (With Live User Location)</span> </h2>
+      <div className="border-b-2 border-black border-t-2">
+        <h2
+          className="text-3xl font-bold p-2 bg-black border-t-1 border-white text-center text-yellow-400"
+          style={{
+            WebkitTextStrokeWidth: "1px",
+            WebkitTextStrokeColor: "black",
+          }}
+        >
+          Major Vet Clinics in India{" "}
+          <span className="text-blue-600"> (With Live User Location)</span>{" "}
+        </h2>
         <div
           id="map"
           ref={mapRef}
