@@ -8,6 +8,7 @@ import bg from "../assets/bg.mp4";
 import { io } from "socket.io-client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import img from "../assets/newimg.jpg";
 
 const Homepage = () => {
   const [posts, setposts] = React.useState([]);
@@ -62,7 +63,6 @@ const Homepage = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          
           const { latitude, longitude } = position.coords;
 
           // Add user marker
@@ -198,6 +198,18 @@ const Homepage = () => {
         </div>
       </section>
 
+      <div className="bg-black w-full flex justify-between border-t-2 border-white items-center">
+        <div className="w-1/3">
+          <p className="text-white text-6xl gap-1">
+            THE HOME FOR ALL THE PETS IN NEED
+          </p>
+        </div>
+
+        <div className="w-2/3">
+          <img src={img} alt="" />
+        </div>
+      </div>
+
       {/* Featured Pets Section */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
@@ -269,7 +281,7 @@ const Homepage = () => {
       </section>
 
       {/* Call-to-Action Section */}
-      <section className="py-16 bg-gradient-to-r from-slate-600 to-gray-900 text-white text-center">
+      <section className="py-16 bg-gradient-to-r bg-gray-100 text-black text-center">
         <h2 className="text-3xl font-bold mb-4">
           Looking to Adopt or Post a Pet?
         </h2>
@@ -283,7 +295,7 @@ const Homepage = () => {
             whileHover={{ scale: 1.05, y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             href="/create-post"
-            className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
+            className="bg-yellow-400 text-black border-2 border-white hover:border-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             Post a Pet
           </motion.a>
@@ -293,7 +305,7 @@ const Homepage = () => {
             whileHover={{ scale: 1.05, y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             href="/donate"
-            className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
+            className="bg-yellow-400 text-black border-2 border-white hover:border-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             Donate
           </motion.a>
@@ -303,12 +315,13 @@ const Homepage = () => {
             whileHover={{ scale: 1.05, y: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             href="/profile"
-            className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
+            className="bg-yellow-400 text-black border-2 border-white hover:border-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-500"
           >
             View Profile
           </motion.a>
         </div>
       </section>
+
       <div className="border-b-2 border-black border-t-2">
         <h2
           className="text-3xl font-bold p-2 bg-black border-t-1 border-white text-center text-yellow-400"
