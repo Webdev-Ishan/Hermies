@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
-import Signup from "./pages/signup";
+import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import PetInfo from "./pages/Petinfo";
 import Donation from "./pages/Donation";
@@ -13,8 +13,8 @@ import AIhelp from "./pages/AIhelp";
 import Postsinfo from "./pages/PostInfo";
 import Adoption from "./pages/Adoption";
 import Application from "./pages/ApplicationInfo";
-import ApplicationPage from "./pages/viewApplication";
-import Review from "./pages/review";
+import ApplicationPage from "./pages/ViewApplication";
+import Review from "./pages/Review";
 import Protected from "./Components/Protected";
 const App = () => {
   return (
