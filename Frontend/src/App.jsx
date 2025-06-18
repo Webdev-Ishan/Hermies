@@ -10,7 +10,7 @@ import Donation from "./pages/Donation";
 import CreatePost from "./pages/CreatePost";
 import AllPets from "./pages/Allpets";
 import AIhelp from "./pages/AIhelp";
-import Postsinfo from "./pages/postInfo";
+import Postsinfo from "./pages/PostInfo";
 import Adoption from "./pages/Adoption";
 import Application from "./pages/ApplicationInfo";
 import ApplicationPage from "./pages/viewApplication";
